@@ -1,0 +1,84 @@
+<html>
+<head>
+	<link rel='stylesheet' href='bower_components/fullcalendar/dist/fullcalendar.css' />
+	<link rel='stylesheet' href='calendrier.css' />
+	<script src='bower_components/jquery/dist/jquery.min.js'></script>
+	<script src='bower_components/moment/min/moment.min.js'></script>
+	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+	<script src='date2.js'></script>
+	<script>
+	console.log("hello");
+	var events = new Array();
+		$(document).ready(function() {
+
+		    // page is now ready, initialize the calendar...
+		    events.push(...reservations[2],...free);
+		    /**reservations[2].push(...mine);
+		    console.log(reservations[2]);**/
+		    var previous = null;
+		    var previouscolor = '';
+		    $('#calendar').fullCalendar({
+		    	header: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'month,agendaWeek,agendaDay'
+				},
+		        events: events,
+    			slotDuration: '00:15:00',
+    			timeFormat: 'H:mm',
+    			displayEventEnd : true,
+
+    			eventClick: function(calEvent, jsEvent, view) {
+
+    				previouscolor = $(this).css('border-color');
+			        // change the border color just for fun
+			        $(this).css('border-color', 'red');
+			        $("#title").val(calEvent.title);
+			        $("#start").val(calEvent.start);
+			        $("#end").val(calEvent.end);
+			        $("#id").val(calEvent.id);
+			        crenaux = getCreauxLibresHelper(calEvent.start);
+			        $("#dispoDay").val(crenaux.total);
+			        var creneauxString = "";
+			        for(var key in crenaux.libresliste){
+			        	creneauxString += key + " - " + crenaux.libresliste[key]+"\n" ;
+			        };
+			        $("#dispodetail").val(creneauxString);
+			        console.log(creneauxString);
+			        console.log(calEvent);
+
+			        if(previous != null)
+			        	previous.css('border-color', previouscolor);
+
+			        previous = $(this);
+
+			    }
+
+
+		    })
+
+		    
+
+		});
+	</script>
+</head>
+<body>
+	<div id="content">
+		<div id="calendar"></div>
+		<div id="book_bar">
+			RESERVATION
+			<form onsubmit="book(this)">
+				Titre : <input id="title" name="title" type="text"/>
+				début : <input id="start" name="start" type="text"/>
+				fin : <input id="end" name="end" type="text"/>
+				duree: <input id="duree" name="duree" type="text"/>
+				nb creneaux jour: <input id="dispoDay" type="text"/>
+				creneaux : <textarea id="dispodetail"></textarea>
+				<input id="id" name="id" type="hidden"/>
+				<input type="submit" value="Reserver"/>
+				<input 
+			</form>
+		</div>
+	</div>
+</body>
+</html>

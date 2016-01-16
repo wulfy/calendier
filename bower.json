@@ -1,0 +1,21 @@
+{
+  "name": "calendier",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "authors": [
+    "ludo"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fullcalendar": "~2.6.0"
+  }
+}
