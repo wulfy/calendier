@@ -37,11 +37,11 @@
 			        $("#start").val(calEvent.start);
 			        $("#end").val(calEvent.end);
 			        $("#id").val(calEvent.id);
-			        crenaux = getCreauxLibresHelper(calEvent.start);
+			        crenaux = getCreauxLibresHelper(calEvent.start,reservations[2]);
 			        $("#dispoDay").val(crenaux.total);
 			        var creneauxString = "";
-			        for(var key in crenaux.libresliste){
-			        	creneauxString += key + " - " + crenaux.libresliste[key]+"\n" ;
+			        for(var value of crenaux.libresliste){
+			        	creneauxString += value.title + " - " + value.frees.length+"\n" ;
 			        };
 			        $("#dispodetail").val(creneauxString);
 			        console.log(creneauxString);
