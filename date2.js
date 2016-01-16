@@ -92,34 +92,6 @@ function getMounthFreeCrenaux(searchedMonth){
   var startDate = moment('01/05/2016 17:30:00',format);
 }
 
-function getCreneauxLibres(startDate,endDate,reservations,duree){
-  var creneauxReserves = 0;
-  var diffTotaux = endDate.diff(startDate);
- 
-  
-  var dureems = duree *60*1000;
-
-  var creneauxTotaux = diffTotaux/dureems + (diffTotaux%dureems?1:0);
-  
-  for(var momentdate of reservations)
-  {
-      comparemomentEnd = moment(momentdate.end.hours() +":" + momentdate.end.minutes(), "HH:mm");
-      comparemomentStart = moment(momentdate.start.hours() +":" + momentdate.start.minutes(), "HH:mm");
-      
-      if(comparemomentStart.isBetween(startDate,endDate))
-      {
-        var diff = comparemomentEnd.diff(comparemomentStart);
-        diff = comparemomentEnd.diff(comparemomentStart);
-        creneauxReserves += parseInt(diff/dureems) + (diff%dureems?1:0);
-        
-      }
-  }
-  console.log("pouet");
-   console.log(creneauxTotaux);
-  console.log(creneauxReserves);
-  console.log("prout");
-    return creneauxTotaux-creneauxReserves;
-}
 
 function getFreeTimeForDuration(startDate,endDate,reservations,duree){
     var index_reservation = 0;
@@ -163,83 +135,7 @@ function getFreeTimeForDuration(startDate,endDate,reservations,duree){
 }
  
 var free = null;
-function getAvailabilitiesForDay(date,reservationsForDay){
-  free = new Array();
-  var jourtotest = date.getDay();
-  var durees_ouverture = getDuree(periode[jourtotest]);
-  console.log(durees_ouverture);
-  var jour_reservations = reservationsForDay;
-  var currentDate = date;
-  console.log(jour_reservations);
-  var index_reservation = 0;
-  var reservation_available = true;
-  
-  for(i=0; i<durees_ouverture.length-1; i=i+2)
-  {
-    
-    
-    var hours = durees_ouverture[i].split(":");
-    var hoursEnd = durees_ouverture[i+1].split(":");
-    console.log(hours[0] + ':' + hours[1] + '-' + hoursEnd);
-    console.log(currentDate.setHours(hours[0],hours[1]));
-    var startDate = currentDate.setHours(hours[0],hours[1]);
-    var endDate = currentDate.setHours(hoursEnd[0],hoursEnd[1]);
-    
-    
-    var nbCreneaux = getNbCreneaux(endDate,startDate,duree_reservee);
-    var testDate = startDate;
-    var endtestDate = testDate + duree_reservee*60*1000;
-    console.log("creneaux " + nbCreneaux);
-    console.log("resa " + jour_reservations);
-    var current_reservation = jour_reservations[index_reservation];
-    //var startReservations = current_reservation.start.getTime();
-    //var endReservation = startReservations + current_reservation.duree*60*1000;
-    var startReservations = current_reservation.start;
-    var endReservation = current_reservation.end;
-    for(j=0;j<nbCreneaux;j++)
-    { 
-    //console.log(new Date(testDate) + " testing");
-      //console.log(endReservation + " = " + testDate);
-      
-      //si la réservation se termine avant le créneau testé
-      //on passe à la réservation suivante
-      if(endReservation <= testDate){
-      //console.log("index : " +index_reservation );
-        index_reservation ++;
-        
-        //s"il y a encore des réservations on passe a la suivante
-        if(index_reservation < jour_reservations.length)
-        {
-            current_reservation = jour_reservations[index_reservation];
-            //startReservations = current_reservation.start.getTime();
-            startReservations = current_reservation.start;
-            //endReservation = startReservations +       current_reservation.duree*60*1000;
-            endReservation = current_reservation.end;
-        }else
-        {
-          reservation_available = false;
-        }
-      }
-      
-      //si le créneau testé se termine avant le début de la prochaine réservation ou que l'on a plus de réservation : dispo
-      if(endtestDate <= startReservations || !reservation_available){
-        free.push({title:"free" ,start: moment(testDate),end: moment(testDate).add(duree_reservee,"m"),duree:duree_reservee,color:'#01DF3A',free:true});
-        console.log(new Date(testDate) + " disponible");
-      }
-      
-      
-      //console.log(jour_reservations.indexOf(testDate));
-      //if(jour_reservations.indexOf(testDate)<0)
-        //console.log(new Date(testDate) + " disponible");
-        
-       testDate += duree_reservee*60*1000;
-       endtestDate +=duree_reservee*60*1000;
-    }
-    
-  }
-  
-  
-}
+
 
 function book(form){
   console.log("date from form" + form.start.value);
