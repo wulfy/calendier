@@ -51,7 +51,7 @@ reservations[2].push({title:"resa3" ,start: moment('01/01/2016 15:30:00',format)
 reservations[2].push({title:"resa4" ,start: moment('01/01/2016 16:30:00',format),end:moment('01/01/2016 16:45:00',format),duree:15});
 reservations[2].push({title:"resa5" ,start: moment('01/01/2016 17:30:00',format),end:moment('01/01/2016 17:35:00',format),duree:5});
 reservations[2].push({title:"resa1" , start: moment('05/01/2016 9:00:00',format) , end: moment('05/01/2016 09:40:00',format), duree:40});
-reservations[2].push({title:"ruben" ,start: moment('05/01/2016 10:30:00',format),end: moment('05/01/2016 11:00:00',format),duree:30, color:'red'});
+reservations[2].push({title:"ruben" ,start: moment('05/01/2016 10:30:00',format),end: moment('05/01/2016 14:45:00',format),duree:30, color:'red'});
 reservations[2].push({title:"resa2" ,start: moment('05/01/2016 16:30:00',format),end: moment('05/01/2016 16:45:00',format),duree:15});
 reservations[2].push({title:"resa3" ,start: moment('05/01/2016 17:30:00',format),end: moment('05/01/2016 18:00:00',format),duree:30});
 

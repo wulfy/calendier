@@ -1,0 +1,31 @@
+<html>
+<head>
+	<link rel='stylesheet' href='bower_components/fullcalendar/dist/fullcalendar.css' />
+	<link rel='stylesheet' href='calendrier.css' />
+	<script src='bower_components/jquery/dist/jquery.min.js'></script>
+	<script src='bower_components/moment/min/moment.min.js'></script>
+	<script src='bower_components/fullcalendar/dist/fullcalendar.min.js'></script>
+	<script src='date2.js'></script>
+	<script src='init.js'></script>
+
+</head>
+<body>
+	<div id="content">
+		<div id="calendar"></div>
+		<div id="book_bar">
+			RESERVATION
+			<form onsubmit="book(this)">
+				Titre : <input id="title" name="title" type="text"/>
+				début : <input id="start" name="start" type="text"/>
+				fin : <input id="end" name="end" type="text"/>
+				duree: <input id="duree" name="duree" type="text"/>
+				nb creneaux jour: <input id="dispoDay" type="text"/>
+				creneaux : <textarea id="dispodetail"></textarea>
+				<input id="id" name="id" type="hidden"/>
+				<input type="submit" value="Reserver"/>
+				<input 
+			</form>
+		</div>
+	</div>
+</body>
+</html>
