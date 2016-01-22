@@ -3,11 +3,13 @@ console.log("hello");
 		$(document).ready(function() {
 
 		    // page is now ready, initialize the calendar...
-		    events.push(...reservations[2],...free);
+		    events.push(...reservationsBDD,...free);
 		    /**reservations[2].push(...mine);
 		    console.log(reservations[2]);**/
 		    var previous = null;
 		    var previouscolor = '';
+		    console.log("generating calendar");
+		    console.log(events);
 		    $('#calendar').fullCalendar({
 		    	header: {
 					left: 'prev,next today',
@@ -28,7 +30,7 @@ console.log("hello");
 			        $("#start").val(calEvent.start);
 			        $("#end").val(calEvent.end);
 			        $("#id").val(calEvent.id);
-			        crenaux = getCreauxLibresHelper(calEvent.start,reservations[2]);
+			        crenaux = getCreauxLibresHelper(calEvent.start,reservationsBDD);
 			        $("#dispoDay").val(crenaux.total);
 			        var creneauxString = "";
 			        for(var value of crenaux.libresliste){

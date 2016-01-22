@@ -23,7 +23,8 @@
     "react-router": "1.0.0-rc3",
     "redux": "^3.0.0",
     "superagent": "^0.21.0",
-    "js-yaml": "^3.4.6"
+    "js-yaml": "^3.4.6",
+    "moment":"^2.11.1"
   },
   "devDependencies": {
     "babel": "^5.8.23",

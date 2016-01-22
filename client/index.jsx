@@ -25,9 +25,9 @@ const reducer = combineReducers(reducers);
 //par contre le dispatch de résultat GET_xxxxx  sera lui connu (car ce n est pas une fonction, cf l'action flickr)
 const store   = applyMiddleware(promiseMiddleware,logMiddleware)(createStore)(reducer,initialState);
 
-initialState.calendar.result.map(function(events) {
+/*initialState.calendar.result.map(function(events) {
 		console.log(events);
-	});
+	});*/
 
 render(
   <Provider store={store}>

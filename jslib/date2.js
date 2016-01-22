@@ -40,7 +40,10 @@ periodes[6]="08:00,12:00";
 
 var duree_reservee = 15;
 var reservations = new Array();
+
 var format = "DD/MM/YYYY HH:mm:ss";
+
+
 
 
 reservations[2] = new Array();
@@ -54,6 +57,10 @@ reservations[2].push({title:"resa1" , start: moment('05/01/2016 9:00:00',format)
 reservations[2].push({title:"ruben" ,start: moment('05/01/2016 10:30:00',format),end: moment('05/01/2016 14:45:00',format),duree:30, color:'red'});
 reservations[2].push({title:"resa2" ,start: moment('05/01/2016 16:30:00',format),end: moment('05/01/2016 16:45:00',format),duree:15});
 reservations[2].push({title:"resa3" ,start: moment('05/01/2016 17:30:00',format),end: moment('05/01/2016 18:00:00',format),duree:30});
+reservations[2].push({title:"test ludo" ,start: moment(1453105800* 1000),end: moment(1453107600* 1000),duree:30});
+
+console.log("start");
+console.log(moment(1453105800* 1000));
 
 function getFirstDayMomentForMonth(monthNumber){
   return moment('01/'+monthNumber+'/2016 01:00:00',format);
@@ -146,7 +153,7 @@ console.log(startDate.month());
     console.log("in");
     if(startDate.date() != 5)
     {
-        currentFree=getCreauxLibresHelper(startDate,reservations[2]);
+        currentFree=getCreauxLibresHelper(startDate,reservationsBDD);
 
         for(var libres of currentFree.libresliste)
         {
@@ -218,7 +225,7 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
       //si le créneau testé se termine avant le début de la prochaine réservation ou que l'on a plus de réservation : dispo
       if(endtestDate <= startReservations || !reservation_available){
         free.push({title:"free" ,start: starttestDate.clone(),end: endtestDate.clone(),duree:duree,color:'#01DF3A',free:true});
-        console.log(moment(starttestDate).format(format) + " disponible");
+        //console.log(moment(starttestDate).format(format) + " disponible");
       }
       
         
@@ -237,7 +244,7 @@ function book(form){
   $('#calendar').fullCalendar( 'renderEvent', booking, true);
 }
 
-free = getCreauxLibresHelper(moment('01/05/2016',"MM/DD/YYYY"),reservations[2]).free;
+free = getCreauxLibresHelper(moment('01/05/2016',"MM/DD/YYYY"),reservationsBDD).free;
 getMounthFreeCrenaux(1);
 //var test = getReservationByMonthDays(reservations[2],1);
 //console.log(test);

@@ -55,21 +55,24 @@ app.use((req, res) => {
                 <title>Calendar</title>
                   <link rel='stylesheet' href='components/fullcalendar/dist/fullcalendar.css' />
                   <link rel='stylesheet' href='calendrier.css' />
-                  <script src='components/jquery/dist/jquery.min.js'></script>
-                  <script src='components/moment/min/moment.min.js'></script>
-                  <script src='components/fullcalendar/dist/fullcalendar.min.js'></script>
-                  <script src='date2.js'></script>
+                  
                   <script type="application/javascript">
                     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
+                    var reservationsBDD = new Array();
                     function fadeOut(domid)
                     {
                       $( domid ).fadeOut( "slow");
                     }
                   </script>
-                  <script src='init.js'></script>
+                  
               </head>
               <body>
                 <div id="react-view">${componentHTML}</div>
+                <script src='components/jquery/dist/jquery.min.js'></script>
+                  <script src='components/moment/min/moment.min.js'></script>
+                  <script src='components/fullcalendar/dist/fullcalendar.min.js'></script>
+                  <script src='date2.js'></script>
+                  <script src='init.js'></script>
                 <script type="application/javascript" src="/bundle.js"></script>
               </body>
           </html>    
