@@ -14,13 +14,11 @@ export default class Home extends React.Component {
 
   render() 
   {
-    console.log("render home");
     return (
       <div id="content">
           <MessagesContainer />
           <CalendarContainer />
-          <FormContainer 
-              {...bindActionCreators(BookActions)}/>
+          <FormContainer />
       </div>
     );
   }

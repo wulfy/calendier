@@ -19,14 +19,14 @@ export default class MessagesContainer extends React.Component {
           color: 'green',
         };
 
-
+        console.log(messages);
       if(Object.keys(messages).length >0)
       {
         //document.getElementById("messages-container").style.display = null;
-        if(messages.data.status == "OK")
-          messagestring = <span style={okStyle}> {messages.dateEnd} - {messages.data.status} </span>;
-        else if(messages.data.status == "ERROR")
-          messagestring = <span style={errorStyle}> {messages.dateEnd} - {messages.data.status} - {messages.data.message} </span>;
+        if(messages.display == "OK")
+          messagestring = <span style={okStyle}> {messages.data} </span>;
+        else if(messages.display == "error")
+          messagestring = <span style={errorStyle}> {messages.data} </span>;
       }
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
 		return (

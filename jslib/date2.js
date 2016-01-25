@@ -38,14 +38,14 @@ periodes[5]="08:00,12:00,14:30,18:30";
 periodes[6]="08:00,12:00";
 
 
-var duree_reservee = 15;
+var duree_reservee = 30;
 var reservations = new Array();
 
 var format = "DD/MM/YYYY HH:mm:ss";
 
 
 
-
+/**
 reservations[2] = new Array();
 reservations[2].push({title:"resa1" , start: moment('01/01/2016 8:00:00',format),end:moment('01/01/2016 12:00:00',format),duree:40});
 reservations[2].push({title:"resa1" , start: moment('06/01/2016 8:00:00',format),end:moment('07/01/2016 12:00:00',format),duree:40});
@@ -58,9 +58,7 @@ reservations[2].push({title:"ruben" ,start: moment('05/01/2016 10:30:00',format)
 reservations[2].push({title:"resa2" ,start: moment('05/01/2016 16:30:00',format),end: moment('05/01/2016 16:45:00',format),duree:15});
 reservations[2].push({title:"resa3" ,start: moment('05/01/2016 17:30:00',format),end: moment('05/01/2016 18:00:00',format),duree:30});
 reservations[2].push({title:"test ludo" ,start: moment(1453105800* 1000),end: moment(1453107600* 1000),duree:30});
-
-console.log("start");
-console.log(moment(1453105800* 1000));
+**/
 
 function getFirstDayMomentForMonth(monthNumber){
   return moment('01/'+monthNumber+'/2016 01:00:00',format);
@@ -108,6 +106,7 @@ function getNbCreneaux(endDate,startDate,dureeCreneau){
 function getCreauxLibresHelper(dateDay,reservationforday){
   console.log("getCreauxLibresHelper");
   var dayNumber = dateDay.day();
+  
   var periode = periodes[dayNumber];
   var frees = new Array();
   var libres = new Array();
@@ -118,6 +117,7 @@ function getCreauxLibresHelper(dateDay,reservationforday){
   {
 
     var durees = getDuree(periode);
+
     var dateStart = dateDay.clone();
     var dateEnd = dateDay.clone();
     var currentStartDuree = null;
@@ -129,13 +129,14 @@ function getCreauxLibresHelper(dateDay,reservationforday){
           currentStartDuree = moment(durees[i],"HH:mm");
           currentEndDuree = moment(durees[i+1],"HH:mm");
 
-         dateStart.hours(currentStartDuree.hour()).minute(currentStartDuree.minute());
-         dateEnd.hour(currentEndDuree.hour()).minute(currentEndDuree.minute());
+         dateStart.hour(currentStartDuree.hour()).minute(currentStartDuree.minute()).second(0);
+         dateEnd.hour(currentEndDuree.hours()).minute(currentEndDuree.minute()).second(0);
+
          libres = getFreeTimeForDuration(dateStart,dateEnd,reservationforday,duree_reservee);
          frees.push(...libres);
          total += libres.length;
-         console.log(frees.length);
-        creneauxLibresListe.push({title:durees[i] +"-"+durees[i+1], frees:libres,start:dateStart.clone(),end:dateEnd.clone()});
+         
+        creneauxLibresListe.push({title:durees[i] +"-"+durees[i+1], frees:libres,start:dateStart.clone(),end:dateEnd.clone(),allDay:false});
     }
   }
 
@@ -147,26 +148,28 @@ function getMounthFreeCrenaux(searchedMonth){
   var monthFree = new Array();
   var currentFree = null;
   var watchDog = 0;
-console.log(startDate.month());
+  var freeMonth = new Array();
+console.log("getMounthFreeCrenaux");
   while(startDate.month()+1 == searchedMonth && watchDog <=32)
   {
     console.log("in");
-    if(startDate.date() != 5)
-    {
+
         currentFree=getCreauxLibresHelper(startDate,reservationsBDD);
 
         for(var libres of currentFree.libresliste)
         {
           if(libres.frees.length < 1)
-            free.push({title:"FULL " ,start: libres.start,end: libres.end,color:'red',free:false});
+            freeMonth.push({title:"FULL " ,start: libres.start,end: libres.end,color:'red',free:false});
           else
-            free.push({title:"free "+libres.frees.length ,start: libres.start,end: libres.end,color:'#01DF3A',free:true});
+            freeMonth.push({title:"free "+libres.frees.length ,start: libres.start,end: libres.end,color:'#01DF3A',free:true});
         }
-    }
+    
         startDate.add(1,"d");
         watchDog++;
 
   }
+
+  return freeMonth;
 }
 
 
@@ -179,34 +182,48 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
     endtestDate.add(duree,"m");//permet de connaitre la fin du créneau testé, ne pas confondre avec endDate qui correspond à la fin de période
     var reservation_available = true;
     var free = new Array();
-    var startReservations = 0;
-    var endReservation = 0;
-    var current_reservation = 0;
+    var startReservations = moment();
+    var endReservation = moment();
+    var current_reservation = moment();
     
-
+    //on parcourt chaque date de réservation pour rechercher la 1ere réservation qui chevauche l'intervalle choisit
     for(var resa of dayreservations)
     {
-      if(resa.end >= starttestDate && resa.start.date()<=endtestDate.date())
+      //si la réservation traverse l'intervalle  testé, on stoppe la recherche
+      if(resa.end.isSameOrAfter(startDate) && resa.start.isSameOrBefore(endDate))
         break;
 
       index_reservation ++;
     }
+
+    //si on a terminé les réservation , on note qu'il n'y en a plus
     if(index_reservation>dayreservations.length-1)
       reservation_available = false;
     else
     {
+      //sinon on récupère des réservations de la journée celle concernée
       current_reservation = dayreservations[index_reservation];
       startReservations = current_reservation.start;
       endReservation = current_reservation.end;
     }
     
-
+    //on parcourt tous les créneaux de l'intervalle choisit (1h contient 4 créneaux de 15min par exemple)
     for(j=0;j<nbCreneaux;j++)
     { 
+      
+      //si le créneau testé se termine avant le début de la prochaine réservation ou que l'on a plus de réservation : dispo
+      if(endtestDate.unix() <= startReservations.unix() || !reservation_available){
+        free.push({title:"free" ,start: starttestDate.clone(),end: endtestDate.clone(),duree:duree,color:'#01DF3A'});
+        //console.log(moment(starttestDate).format(format) + " disponible");
+      }
+      
+      starttestDate.add(duree,"m");
+       endtestDate.add(duree,"m");
 
-      //permet de véifier s'il y a une réservation après, si oui la prépare pour une nouvelle boucle
+       //vérifier que la réservation en cours est terminée sur ce créneau et qu'il y a des réservations après, 
+       //si oui la prépare pour une nouvelle boucle
       //suppose que les réservations sont fournies dans l'ordre chronologique
-      if(endReservation <= starttestDate && reservation_available){
+      if(endReservation.unix() <= starttestDate.unix() && reservation_available){
         index_reservation ++;
         
         //s"il y a encore des réservations on passe a la suivante
@@ -220,22 +237,14 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
           reservation_available = false;
         }
       }
-      
 
-      //si le créneau testé se termine avant le début de la prochaine réservation ou que l'on a plus de réservation : dispo
-      if(endtestDate <= startReservations || !reservation_available){
-        free.push({title:"free" ,start: starttestDate.clone(),end: endtestDate.clone(),duree:duree,color:'#01DF3A',free:true});
-        //console.log(moment(starttestDate).format(format) + " disponible");
-      }
-      
-        
-       starttestDate.add(duree,"m");
-       endtestDate.add(duree,"m");
+
+       
     }
     return free;
 }
  
-var free = null;
+
 
 
 function book(form){
@@ -244,8 +253,7 @@ function book(form){
   $('#calendar').fullCalendar( 'renderEvent', booking, true);
 }
 
-free = getCreauxLibresHelper(moment('01/05/2016',"MM/DD/YYYY"),reservationsBDD).free;
-getMounthFreeCrenaux(1);
+
 //var test = getReservationByMonthDays(reservations[2],1);
 //console.log(test);
 

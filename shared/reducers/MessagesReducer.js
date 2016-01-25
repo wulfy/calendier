@@ -16,11 +16,13 @@ function dateToStr(vardate) {
 export default function messageReducer(state = defaultState, action) {
   switch(action.type) {
     case 'BOOK_DATE_COMMAND':
-      return {data:action.res.data,type:action.type} ;
+      return {data:action.res.data,type:action.type,display:"OK"} ;
     case 'BOOK_DATE_COMMAND_FAILURE':
-      return {data:action.res.data,type:action.type} ;
+      return {data:action.res.data,type:action.type,display:"error"} ;
     case 'BOOK_DATE_COMMAND_REQUEST':
-      return {data:action.res.data,type:action.type} ;
+      return {data:action.res.data,type:action.type,display:"OK"} ;
+    case 'GET_EVENTS_FAILURE':
+      return {data:"Error no data found",type:action.type,display:"error"} ;
     default:
       return state;
   }
