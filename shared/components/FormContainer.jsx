@@ -13,6 +13,9 @@ export default class FormContainer extends React.Component {
       var {dispatch} = this.props;
 		return (
             <div id="form-container">
+                <div id="close-form">X</div>
+                <h3> Réserver </h3>
+                <span id="creneauForm"></span>
                 <FormView
                     {...bindActionCreators(CalendarActions,dispatch)} />
             </div>

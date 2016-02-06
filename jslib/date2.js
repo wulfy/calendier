@@ -2,6 +2,13 @@ var date = new Date();
 var firstDay = new Date(date.getFullYear(), date.getMonth(), 1, 23, 59, 59);
 var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
 
+const DEBUG_MODE = false;
+function mylog(text){
+    if(DEBUG_MODE)
+      console.log(text);
+  }
+
+
 var weekday = new Array(7);
 weekday[0]=  "Dimanche";
 weekday[1] = "Lundi";
@@ -26,8 +33,8 @@ month[11] = "Novembre";
 month[12] = "Decembre";
 
 
-console.log(weekday[firstDay.getDay()]+ " " + firstDay.getUTCDate()+ " " + month[date.getUTCMonth() + 1])
-console.log(weekday[lastDay.getDay()] + " " + lastDay.getUTCDate() + " "+ month[date.getUTCMonth() + 1])
+mylog(weekday[firstDay.getDay()]+ " " + firstDay.getUTCDate()+ " " + month[date.getUTCMonth() + 1])
+mylog(weekday[lastDay.getDay()] + " " + lastDay.getUTCDate() + " "+ month[date.getUTCMonth() + 1])
 
 var periodes = new Array(7);
 periodes[1]="08:00,12:00,14:30,18:30";
@@ -103,8 +110,8 @@ function getNbCreneaux(endDate,startDate,dureeCreneau){
 }
 
 
-function getCreauxLibresHelper(dateDay,reservationforday){
-  console.log("getCreauxLibresHelper");
+function getCreauxLibresHelper(dateDay,reservationforday,clickable){
+  mylog("getCreauxLibresHelper");
   var dayNumber = dateDay.day();
   
   var periode = periodes[dayNumber];
@@ -126,13 +133,13 @@ function getCreauxLibresHelper(dateDay,reservationforday){
     
     for(i=0; i<durees.length-1; i=i+2)
     {
-          currentStartDuree = moment(durees[i],"HH:mm");
-          currentEndDuree = moment(durees[i+1],"HH:mm");
+          currentStartDuree = myMoment(durees[i],"HH:mm");
+          currentEndDuree = myMoment(durees[i+1],"HH:mm");
 
          dateStart.hour(currentStartDuree.hour()).minute(currentStartDuree.minute()).second(0);
          dateEnd.hour(currentEndDuree.hours()).minute(currentEndDuree.minute()).second(0);
 
-         libres = getFreeTimeForDuration(dateStart,dateEnd,reservationforday,duree_reservee);
+         libres = getFreeTimeForDuration(dateStart,dateEnd,reservationforday,duree_reservee,clickable);
          frees.push(...libres);
          total += libres.length;
          
@@ -144,15 +151,18 @@ function getCreauxLibresHelper(dateDay,reservationforday){
 }
 
 function getMounthFreeCrenaux(searchedMonth){
-  var startDate = getFirstDayMomentForMonth(searchedMonth);
+
+  var realMonth = (searchedMonth<12)?searchedMonth+1:1;
+  var startDate = getFirstDayMomentForMonth(realMonth);
   var monthFree = new Array();
   var currentFree = null;
   var watchDog = 0;
   var freeMonth = new Array();
-console.log("getMounthFreeCrenaux");
-  while(startDate.month()+1 == searchedMonth && watchDog <=32)
+mylog("getMounthFreeCrenaux " + realMonth + " " + searchedMonth);
+
+  while(startDate.month()+1 == realMonth && watchDog <=32)
   {
-    console.log("in");
+    mylog("in");
 
         currentFree=getCreauxLibresHelper(startDate,reservationsBDD);
 
@@ -173,8 +183,8 @@ console.log("getMounthFreeCrenaux");
 }
 
 
-function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
-  console.log("getFreeTimeForDuration");
+function getFreeTimeForDuration(startDate,endDate,dayreservations,duree,clickable){
+  mylog("getFreeTimeForDuration");
     var index_reservation = 0;
     var nbCreneaux = getNbCreneaux(endDate,startDate,duree);
     var starttestDate = startDate.clone();
@@ -182,13 +192,15 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
     endtestDate.add(duree,"m");//permet de connaitre la fin du créneau testé, ne pas confondre avec endDate qui correspond à la fin de période
     var reservation_available = true;
     var free = new Array();
-    var startReservations = moment();
-    var endReservation = moment();
-    var current_reservation = moment();
+    var startReservations = myMoment();
+    var endReservation = myMoment();
+    var current_reservation = myMoment();
     
+
     //on parcourt chaque date de réservation pour rechercher la 1ere réservation qui chevauche l'intervalle choisit
     for(var resa of dayreservations)
     {
+
       //si la réservation traverse l'intervalle  testé, on stoppe la recherche
       if(resa.end.isSameOrAfter(startDate) && resa.start.isSameOrBefore(endDate))
         break;
@@ -213,8 +225,8 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
       
       //si le créneau testé se termine avant le début de la prochaine réservation ou que l'on a plus de réservation : dispo
       if(endtestDate.unix() <= startReservations.unix() || !reservation_available){
-        free.push({title:"free" ,start: starttestDate.clone(),end: endtestDate.clone(),duree:duree,color:'#01DF3A'});
-        //console.log(moment(starttestDate).format(format) + " disponible");
+        free.push({title:"free" ,start: starttestDate.clone(),end: endtestDate.clone(),duree:duree,color:'#01DF3A',clickable:clickable});
+        //mylog(moment(starttestDate).format(format) + " disponible");
       }
       
       starttestDate.add(duree,"m");
@@ -248,12 +260,12 @@ function getFreeTimeForDuration(startDate,endDate,dayreservations,duree){
 
 
 function book(form){
-  console.log("date from form" + form.start.value);
+  mylog("date from form" + form.start.value);
   var booking = {title:form.title.value ,start: new Date(form.start.value),end:new Date(form.end.value),duree:15,color:'red'};
-  $('#calendar').fullCalendar( 'renderEvent', booking, true);
+  calendarObject.fullCalendar( 'renderEvent', booking, true);
 }
 
 
 //var test = getReservationByMonthDays(reservations[2],1);
-//console.log(test);
+//mylog(test);
 

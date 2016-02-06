@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import CalendarContainer       from 'components/CalendarContainer';
 import MessagesContainer       from 'components/MessagesContainer';
 import FormContainer       from 'components/FormContainer';
+import LoginContainer       from 'components/LoginContainer';
 import * as BookActions       from 'actions/BookActions';
 import * as CalendarActions       from 'actions/CalendarActions';
 
@@ -16,6 +17,7 @@ export default class Home extends React.Component {
   {
     return (
       <div id="content">
+          <LoginContainer />
           <MessagesContainer />
           <CalendarContainer />
           <FormContainer />

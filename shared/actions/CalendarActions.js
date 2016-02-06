@@ -1,6 +1,7 @@
 import request from 'axios';
 
 const BACKEND_GET_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/2/client/1";
+const BACKEND_GET_USER_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/";
 const BACKEND_POST_URL = "http://localhost/calendrier_api/web/app_dev.php/events";
 
 export function getEvents()
@@ -12,16 +13,28 @@ export function getEvents()
   }
 }
 
-export function postBooking(formData)
+export function getUserEvents()
+{
+  var config = {withCredentials:true};
+  return {
+    type: 'GET_EVENTS',
+    promise: request.get(BACKEND_GET_USER_URL,config),
+    date: Date.now()
+  }
+}
+
+export function postBooking(formData,callback)
 {
   console.log("booking");
   console.log(formData);
   return {
     type: 'POST_BOOKING',
     promise: request.post(BACKEND_POST_URL,formData),
+    then:callback,
     date: Date.now()
   }
 }
+
 
 /*
 promise: request.post(BACKEND_POST_URL,formData,{headers: { 

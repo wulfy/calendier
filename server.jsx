@@ -55,7 +55,7 @@ app.use((req, res) => {
                 <title>Calendar</title>
                   <link rel='stylesheet' href='components/fullcalendar/dist/fullcalendar.css' />
                   <link rel='stylesheet' href='calendrier.css' />
-                  
+                  <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css"/>
                   <script type="application/javascript">
                     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
                     var reservationsBDD = new Array();

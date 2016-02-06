@@ -12,15 +12,29 @@ export default class DevicesContainer extends React.Component {
     		return { __html: html }; 
     }
     componentDidMount = () =>{
-    	var { events, dispatch} = this.props;
+    	//var { events, dispatch} = this.props;
+      reservationsBDD = this.props.events.reservations;
       console.log("didmount");
-      console.log(events);
-    	reservationsBDD = events.reservations;
+      console.log(reservationsBDD);
+
   	}
+
+    componentDidUpdate =(prevProps,prevState)=>{
+      var { events, dispatch} = this.props;
+          console.log("update");
+          console.log(events);
+          var newevents = new Array();
+          reservationsBDD = events.reservations;
+            var free = getCreauxLibresHelper(current,events.reservations,true).free;
+            newevents.push(...reservationsBDD,...free);
+            resetCalendarEvent(newevents);
+            
+    }
 	render()
 	{
 		  console.log("STATE RENDERING CALENDAR CONTAINER : ");
-    	   	
+    	var { events, dispatch} = this.props;
+          
 		return (
 			<div id="calendar-container">
 	      		<div id="calendar">
