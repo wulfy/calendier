@@ -1,14 +1,15 @@
 import request from 'axios';
 
-const BACKEND_GET_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/2/client/1";
+//const BACKEND_GET_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/";
 const BACKEND_GET_USER_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/";
 const BACKEND_POST_URL = "http://localhost/calendrier_api/web/app_dev.php/events";
 
-export function getEvents()
+export function getEvents(params)
 {
+  var config = {withCredentials:true};
   return {
     type: 'GET_EVENTS',
-    promise: request.get(BACKEND_GET_URL),
+    promise: request.get(BACKEND_GET_USER_URL+params.userId,config),
     date: Date.now()
   }
 }

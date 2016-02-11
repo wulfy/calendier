@@ -2,6 +2,22 @@
   color:green;
 }
 
+.search_result, .search_result:visited{
+  color:grey;
+}
+
+#login-form{
+  display: none;
+}
+
+.search_result{
+  text-decoration: none;
+}
+
+.search_result:hover{
+  color:red;
+}
+
 .error{
   color:red;
 }

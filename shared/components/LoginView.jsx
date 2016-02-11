@@ -10,14 +10,16 @@ export default class LoginView extends React.Component {
 
   refreshUserEvents = () => {
     console.log("refreshUserEvents")
-    console.log(this.props.loginObject);  
+    console.log(this.props.loginObject); 
+
     if(this.props.loginObject.roles)
     {//is user connected get his role lvl
-      if(this.props.loginObject.roles[0] == "ROLE_ADMIN")
+      if(this.props.loginObject.roles[0] == "ROLE_USER")
         this.props.getUserEvents();  
       else
-        console.log("no");
-    }
+        this.props.getEvents(this.props.params);  
+    }else
+        this.props.getEvents(this.props.params);
   }
   handleLogin = (e) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ export default class LoginView extends React.Component {
   handleLogout = (e) => {
     e.preventDefault();
     console.log("handlelogout");
-    this.props.logoutUser();    
+    this.props.logoutUser(this.refreshUserEvents);    
   }
 	render()
 	{

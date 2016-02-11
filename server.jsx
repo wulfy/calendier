@@ -53,9 +53,9 @@ app.use((req, res) => {
               <head>
                 <meta charset="utf-8">
                 <title>Calendar</title>
-                  <link rel='stylesheet' href='components/fullcalendar/dist/fullcalendar.css' />
-                  <link rel='stylesheet' href='calendrier.css' />
-                  <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css"/>
+                  <link rel='stylesheet' href='/components/fullcalendar/dist/fullcalendar.css' />
+                  <link rel='stylesheet' href='/calendrier.css' />
+                  <link rel="stylesheet" href="https://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css"/>
                   <script type="application/javascript">
                     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
                     var reservationsBDD = new Array();
@@ -68,11 +68,11 @@ app.use((req, res) => {
               </head>
               <body>
                 <div id="react-view">${componentHTML}</div>
-                <script src='components/jquery/dist/jquery.min.js'></script>
-                  <script src='components/moment/min/moment.min.js'></script>
-                  <script src='components/fullcalendar/dist/fullcalendar.min.js'></script>
-                  <script src='date2.js'></script>
-                  <script src='init.js'></script>
+                <script src='/components/jquery/dist/jquery.min.js'></script>
+                  <script src='/components/moment/min/moment.min.js'></script>
+                  <script src='/components/fullcalendar/dist/fullcalendar.min.js'></script>
+                  <script src='/date2.js'></script>
+                  <script src='/init.js'></script>
                 <script type="application/javascript" src="/bundle.js"></script>
               </body>
           </html>    

@@ -19,6 +19,7 @@ export default function CalendarReducer(state = defaultState, action) {
       var message = "";
       var login = null;
       var roles = null;
+      var id=null;
       var className = "success";
       console.log("CONNECT USER");
       if(user.username)
@@ -26,8 +27,9 @@ export default function CalendarReducer(state = defaultState, action) {
         login = user.username;
         roles = user.roles;
         message="connected";
+        id = user.id;
       }
-      return {login:login, message:message, className:className, roles:roles} ;
+      return {login:login, message:message, className:className, roles:roles, id:id} ;
     case 'CONNECT_USER_FAILURE':
         var message="";
         var className = "error";
@@ -51,7 +53,7 @@ export default function CalendarReducer(state = defaultState, action) {
         message = "disconnected";
       }
 
-      return {login:login, message:message, className:className} ;
+      return {login:login, message:message, className:null, roles:null} ;
     default:
       return state;
   }

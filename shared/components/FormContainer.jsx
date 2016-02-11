@@ -17,7 +17,7 @@ export default class FormContainer extends React.Component {
                 <h3> Réserver </h3>
                 <span id="creneauForm"></span>
                 <FormView
-                    {...bindActionCreators(CalendarActions,dispatch)} />
+                    {...bindActionCreators(CalendarActions,dispatch)} userId={this.props.userId}/>
             </div>
       		);
 	}

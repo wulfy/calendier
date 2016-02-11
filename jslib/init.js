@@ -1,7 +1,9 @@
-
-	var events = new Array();
 	var calendarObject = $('#calendar');
-
+	var previousEvent = null;
+	var previousDay = null;
+	var previouscolor = '';
+	var reservationsBDD = [];
+	var user = null;
 	mylog("init");
 
 	function myMoment(data,format)
@@ -9,21 +11,25 @@
 		return moment(data,format).utcOffset('+0100');
 	}
 
-	//today
-	var current = new moment();
-	var freeMonth = new Array();
-	var mine = new Array();
-	var free = new Array();
-	current.add(1,"days");
-	var purgedReservations = new Array();
+	function convertDataToCalendarEvents(reservations)
+	{
+			var convertedReservations = reservations;
 
-	
+			if(reservations)
+			for(i=0;i<reservations.length;i++)
+			{
+				convertedReservations[i].start = myMoment(reservations[i].start);
+				convertedReservations[i].end = myMoment(reservations[i].end);
+			}
+
+			return convertedReservations;
+	}
 	function fadeOut(domid)
 	  {
 	    $( domid ).fadeOut( "slow");
 	  }
                   
-	function resetCalendarEvent(newEvents){
+	function resetCalendarEvents(newEvents){
 		if(typeof calendarObject != "undefined")
 		{
 			mylog("reset calendar");
@@ -32,74 +38,222 @@
 			calendarObject.fullCalendar('addEventSource',newEvents);
 		}
 	}
+	var free = null;
+	function refreshView(view){
+		mylog("refreshView");
+		
+		var events = new Array();
+		var today = new moment().utcOffset('+0100');
+		var currentReservations = getReservationsBDD();//calendarObject.fullCalendar( 'clientEvents',getReservationsFilter);
+		mylog(currentReservations);
+		switch(view.name)
+		{
+			case "month" :
+				    		//calendarObject.fullCalendar('removeEvents');
+				    		//freeMonth = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations);
+				    		freeData = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations,today);
+				    		freeMonth = freeData.freeMonth;
+				    		free = freeData.free;
+				    		var mine = getMine(currentReservations);//calendarObject.fullCalendar( 'clientEvents',getMineFilter);
+				    		events.push(...freeMonth,...mine);
+				    		resetCalendarEvents(events);
+				    		//calendarObject.fullCalendar('addEventSource',events);
+				    		break;
+			case "agendaDay" :
 
-	function redrawCalendar()
+			    			previousDay = $(this);
+				    		var free = getCreauxLibresHelper(myMoment(view.intervalStart),currentReservations,true).free;
+				    		mylog("agenda");
+				    		mylog(currentReservations);
+				    		events.push(...currentReservations,...free);
+				    		resetCalendarEvents(events);
+				    		break;
+		}
+		
+	}
+
+	
+	function updateReservations(reservationsFromReact){
+		mylog("update reservations");
+		reservationsBDD = convertDataToCalendarEvents(reservationsFromReact);
+		refreshView(calendarObject.fullCalendar( 'getView'));
+	}
+	function updateParams(paramsFromReact){
+		if(paramsFromReact)
+		{
+			duree_reservee = paramsFromReact.duree;
+
+			for(var i=0; i<paramsFromReact.bookablePeriods.length;i++)
+			{
+				if(paramsFromReact.bookablePeriods[i].length > 1)
+					periodes[i] = paramsFromReact.bookablePeriods[i];
+			}
+		}
+	}
+
+	function getReservationsBDD(){
+		if(reservationsBDD)
+			return reservationsBDD;
+		else
+			return new Array();
+	}
+
+	function setCurrentUser(userFromReact){
+		user = userFromReact;
+	}
+	function getMine(reservations){
+		var mine = new Array();
+		console.log("user");
+		console.log(user);
+		if(user)
+			if(user.roles)
+				if(user.roles[0] == "ROLE_USER")
+					mine = reservations;
+				else{
+					reservations.forEach((element,index)=>{
+						console.log(element);
+						if(element.idClient == user.id)
+							mine.push(element);
+					});
+				}
+			
+		return mine;
+	}
+
+
+	/******* FULL CALENDAR FILTERS ****/
+	function getMineFilter(eventObject){
+		var mine = new Array();
+
+		if(user)
+			if(eventObject.idClient == user.id)
+				return true;
+
+		return false;
+
+		/*if(user)
+			reservations.forEach((element,index)=>{
+				if(element.idClient == user.id)
+					mine.push(element);
+			})
+
+		return mine;*/
+	}
+	function getReservationsFilter(eventObject){
+		if(!eventObject.free)
+			return true;
+		else
+			return false;
+	}
+
+	function isClickableDate(date,offDays)
 	{
-		mylog("redraw");
-		calendarObject.fullCalendar( 'changeView','agendaDay' );
+		var today = new moment();
+		today.hour(0).seconds(0);
+		return !(date < today || offDays.indexOf(date.day())>=0 );
 	}
 
-	function refreshFreeEvents(reservations){
-		events = new Array();
-		free = getCreauxLibresHelper(current,reservations,true).free;
-		events.push(...reservations,...free);
-		return events;
+	function findFirstDate(frees,creneau,preferedDay){
+		var reservationsForWantedDay = new Array();
+		var propositions = new Array();
+		var lastDay = null;
+		for(var free of frees)
+		{
+
+			creneau.start.date(free.start.date());
+			creneau.end.date(free.end.date());
+			if(free.start >= creneau.start && free.end <= creneau.end && free.start.date() != lastDay){
+				lastDay = free.start.date();
+				propositions.push(free);
+			}
+				
+		}
+
+		return propositions;
 	}
 
-	function changeCurrentDate(month,day,year)
+	function buildSelect(name,min,max,step,form)
 	{
-		current.month(month).date(day).year(year);
+		var htmlOptions = "";
+		var selectHtml = "";
+		var value = 0;
+		for(var i=min;i<=max;i=i+step)
+		{
+				value = ((i<10)?"0":"")+i;
+				htmlOptions +='<option value="'+value+'">'+value+'</option>';
+		}	
+
+		selectHtml = "<select name='"+name+"' form='"+form+"'>"+htmlOptions+"</select>";
+		return selectHtml;
 	}
 
+	function gotoDay(strDate)
+	{
+		var date = new myMoment(strDate,"DD-MM");
+		console.log(date);
+		calendarObject.fullCalendar( 'gotoDate', date );
+		calendarObject.fullCalendar( 'changeView', 'agendaDay' );
+	}
+	function handleSearchForm(e)
+	{
+		e.preventDefault();
+		var start = e.target.fromHour.value+":"+e.target.fromMin.value;
+		var end = e.target.toHour.value+":"+e.target.toMin.value;
+		var creneau = {start:myMoment(start,"HH:mm"),end:myMoment(end,"HH:mm")};
+		free = getMounthFreeCrenaux(creneau.start.month(),getReservationsBDD()).free;
+		var res = "";
+		var currentMonth = calendarObject.fullCalendar( 'getView' ).intervalStart.month();
+		for(var day of findFirstDate(free,creneau))
+			res += "<a class='search_result' href='#' onClick='gotoDay("+day.start.date()+")'>"+day.start.date()+"/"+(currentMonth+1)+"</a> &nbsp;&nbsp;" ;
+
+		$("#res").html(res);
+	}
+
+	function displayConnectForm()
+  {
+      $("#login-form").show();
+      $("#notConnected").hide();
+  }
+	/*********/
 
 		$(document).ready(function() {
 
-			$("#close-form").click(()=>{$("#form-container").hide()});
 			
-			for(i=0;i<reservationsBDD.length;i++)
-			{
-				reservationsBDD[i].start = myMoment(reservationsBDD[i].start);
-				reservationsBDD[i].end = myMoment(reservationsBDD[i].end);
-				if(reservationsBDD[i].idClient)
-				{
-					mine.push(reservationsBDD[i]);
-				}else
-				{
-					purgedReservations.push(reservationsBDD[i]);
-				}
-			}
+			var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +":"+buildSelect("fromMin",0,59,duree_reservee,"search_form");
+			var selectTo = buildSelect("toHour",0,24,1,"search_form") +":"+buildSelect("toMin",0,59,duree_reservee,"search_form");
+			var form = '<form onsubmit="handleSearchForm(event);" id="search_form">' + "FROM " + selectFrom + " -  TO"+ selectTo + 
+			'<button type="submit"><i class="fa fa-search"></i> Rechercher</button></form>'
+			$("#calendar_search_form").html(form + "<div id='res'></div>");
 
-			reservationsBDD = purgedReservations;
-		    // page is now ready, initialize the calendar...
+			$("#close-form").click(()=>{$("#form-container").hide()});
 
-		    reservationsBDD.push(...mine);
-		    if(reservationsBDD.length>0)
-		    {
-		    	//free = getCreauxLibresHelper(current,reservationsBDD,true).free;
-				freeMonth = getMounthFreeCrenaux(current.month());
-		    	events.push(...free,...freeMonth);
-		    }
+	
+    		/*$("#notConnected").hover(function(){
+    			$(this).html('<a href="#" onClick="displayConnectForm()"><i className="fa fa-link"></i>Se connecter</a>');
+    		});*/
+  
+
+
+
 		    /**reservations[2].push(...mine);
 		    mylog(reservations[2]);**/
-		    var previousEvent = null;
-		    var previousDay = null;
-		    var previouscolor = '';
 		    mylog("generating calendar");
 		    //mylog(events);
 		    calendarObject.fullCalendar({
 		    	header: {
 					left: 'prev,next today',
 					center: 'title',
-					right: 'month,agendaWeek,agendaDay'
+					right: 'month,agendaDay'
 				},
-		        events: events,
     			slotDuration: '00:15:00',
     			timeFormat: 'H:mm',
     			timezone: 'Europe/Paris',
+    			utcOffset: '+0100',
     			minTime: '08:00',
     			maxTime: '22:00',
     			displayEventEnd : true,
-    			defaultDate:current,
+    			lang:'fr',
+    			defaultDate: new moment(),
     			eventRender: function(event, element, view){
     				element.append('<p class="text">RESERVER</p>');
     			},
@@ -163,31 +317,25 @@
     				}
 			    },
 			    dayClick: function(date, jsEvent, view) {
+			    	if(isClickableDate(date,offDays))
+			    	{
 			    		calendarObject.fullCalendar( 'gotoDate', date );
 				    	calendarObject.fullCalendar( 'changeView', 'agendaDay' );
+				    }
+				    
 			    },
 			    viewRender: function( view, element ) {
 			    		$("#form-container").hide();
 			    		mylog("viewRender "+view.name);
-			    		switch(view.name)
-			    		{
-			    			case "month" :
-								    		//calendarObject.fullCalendar('removeEvents');
-								    		freeMonth = getMounthFreeCrenaux(view.intervalStart.month());
-								    		events = new Array();
-								    		events.push(...freeMonth,...mine);
-								    		resetCalendarEvent(events);
-								    		//calendarObject.fullCalendar('addEventSource',events);
-								    		break;
-			    			case "agendaDay" :
-							    			previousDay = $(this);
-								    		free = getCreauxLibresHelper(myMoment(view.intervalStart),reservationsBDD,true).free;
-								    		events = new Array();
-								    		events.push(...reservationsBDD,...free);
-								    		resetCalendarEvent(events);
-								    		break;
-			    		}
+			    		refreshView(view);
+			    		
+			    		
 
+
+			    },
+			    dayRender:function( date, cell ) { 
+			    		if(!isClickableDate(date,offDays))
+			    			cell[0].bgColor="grey";
 
 			    }
 

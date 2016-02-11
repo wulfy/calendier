@@ -22,7 +22,7 @@ export function connectUser(data,callback)
   }
 }
 
-export function logoutUser()
+export function logoutUser(callback)
 {
   console.log("logout");
   var config = {withCredentials:true};
@@ -30,6 +30,7 @@ export function logoutUser()
   return {
     type: 'DISCONNECT_USER',
     promise: request.get(BACKEND_GET_DISCONNECT_URL,config),
+    then:callback,
     date: Date.now()
   }
 }

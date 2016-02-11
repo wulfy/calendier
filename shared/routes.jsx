@@ -7,6 +7,6 @@ import Home from 'components/Home';
 
 export default (
   <Route name="app" component={App} path="/">
-    <Route component={Home} path="calendrier" />
+    <Route component={Home} path="calendrier/:userId" />
   </Route>
 );

@@ -9,11 +9,14 @@ import * as CalendarActions       from 'actions/CalendarActions';
 export default class LoginContainer extends React.Component {
 
     
+
     componentDidUpdate =(prevProps,prevState)=>{
+        var {login,dispatch} = this.props;
         //display message container
         $("#login-message").show();
         //hide message container after 5 seconds
         setTimeout(function(){fadeOut("#login-message")},5000);
+        setCurrentUser(login);
     }
 	render()
 	{
@@ -22,7 +25,7 @@ export default class LoginContainer extends React.Component {
 		return (
             <div id="login-container">
                 <LoginView
-                    {...bindActionCreators({...LoginActions,...CalendarActions},dispatch)} loginObject={login} />
+                    {...bindActionCreators({...LoginActions,...CalendarActions},dispatch)} loginObject={login} params={this.props.params} />
                     <div id="login-message" className={login.className}>{login.message}</div>
             </div>
       		);

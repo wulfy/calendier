@@ -25,7 +25,7 @@ export default class FormView extends React.Component {
               <br/>duree: <input id="duree" name="duree" type="text"/>
               nb creneaux jour: <input id="dispoDay" type="text"/>
               <br/>creneaux : <textarea id="dispodetail"></textarea>
-              <input id="id" name="id" type="hidden"/>
+              <input id="userid" name="userid" type="hidden" value={this.props.userId}/>
               <button id="cancel" type="cancel"><i className="fa fa-calendar-times-o">Annuler</i></button>
               <button id="reserver" type="submit"><i className="fa fa-calendar-check-o">Reserver</i></button>
              

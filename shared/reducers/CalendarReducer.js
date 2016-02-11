@@ -21,7 +21,7 @@ export default function CalendarReducer(state = defaultState, action) {
       var reservations = new Array();
           for(var i in events)
           {
-            reservations.push({title:events[i].title , start: moment(events[i].dateStart.timestamp *1000),end:moment(events[i].dateEnd.timestamp *1000),duree:events[i].duree, idClient:events[i].idClient})
+            reservations.push({title:events[i].title , start: moment(events[i].dateStart.timestamp *1000).utcOffset('+0100'),end:moment(events[i].dateEnd.timestamp *1000).utcOffset('+0100'),duree:events[i].duree, idClient:events[i].idClient})
           }
       return {reservations:reservations} ;
     case 'POST_BOOKING': 
