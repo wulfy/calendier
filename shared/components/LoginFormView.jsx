@@ -20,9 +20,12 @@ export default class LoginFormView extends React.Component {
       $("#login-form").show();
       $("#notConnected").hide();
   }
+  handleCancelClick= (e)=>{
+      $("#login-form").hide();
+      $("#notConnected").show();
+  }
 	render()
 	{
-
 		return (
             <div id="form-view">
                 <div id="notConnected" onMouseOver={this.handleHoverConnect} onMouseOut={this.handleOutConnect} onClick={this.state.click}>
@@ -31,7 +34,8 @@ export default class LoginFormView extends React.Component {
                  <form id="login-form" onSubmit={this.props.handleLogin}>
                     login : <input id="login" placeholder="Login" name="login" type="text" />
                     password: <input id="password" placeholder="Password" name="password" type="password" />   
-                    <br/> <button id="connecter" type="submit"><i className="fa fa-calendar-check-o">Connecter</i></button>         
+                    <br/> <button id="connecter" type="submit"><i className="fa fa-calendar-check-o">Connecter</i></button>
+                    <button id="cancelLogin" onClick={this.state.handleCancelClick}><i className="fa fa-times">Annuler</i></button>          
                   </form>
             </div>
       		);

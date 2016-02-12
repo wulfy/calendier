@@ -157,12 +157,16 @@
 		var reservationsForWantedDay = new Array();
 		var propositions = new Array();
 		var lastDay = null;
+		var isWantedDay = true;
 		for(var free of frees)
 		{
 
 			creneau.start.date(free.start.date());
 			creneau.end.date(free.end.date());
-			if(free.start >= creneau.start && free.end <= creneau.end && free.start.date() != lastDay){
+			isWantedDay = (preferedDay?free.start.day()==preferedDay:true); 
+			console.log(preferedDay);
+			console.log(isWantedDay);
+			if(free.start >= creneau.start && free.end <= creneau.end && free.start.date() != lastDay && isWantedDay){
 				lastDay = free.start.date();
 				propositions.push(free);
 			}
@@ -172,15 +176,24 @@
 		return propositions;
 	}
 
-	function buildSelect(name,min,max,step,form)
+	function buildSelect(name,min,max,step,form,values)
 	{
 		var htmlOptions = "";
 		var selectHtml = "";
 		var value = 0;
-		for(var i=min;i<=max;i=i+step)
+		var currentMin = min;
+		var currentMax = max;
+
+		if(values)
 		{
-				value = ((i<10)?"0":"")+i;
-				htmlOptions +='<option value="'+value+'">'+value+'</option>';
+			currentMin = 0;
+			currentMax = values.length -1;
+		}
+		htmlOptions +='<option value=""> - </option>';
+		for(var i=currentMin;i<=currentMax;i=i+step)
+		{
+				value =  (values?values[i]:((i<10)?"0":"")+i);
+				htmlOptions +='<option value="'+i+'">'+value+'</option>';
 		}	
 
 		selectHtml = "<select name='"+name+"' form='"+form+"'>"+htmlOptions+"</select>";
@@ -200,19 +213,35 @@
 		var start = e.target.fromHour.value+":"+e.target.fromMin.value;
 		var end = e.target.toHour.value+":"+e.target.toMin.value;
 		var creneau = {start:myMoment(start,"HH:mm"),end:myMoment(end,"HH:mm")};
+		var day = e.target.day.value;
 		free = getMounthFreeCrenaux(creneau.start.month(),getReservationsBDD()).free;
 		var res = "";
 		var currentMonth = calendarObject.fullCalendar( 'getView' ).intervalStart.month();
-		for(var day of findFirstDate(free,creneau))
+		for(var day of findFirstDate(free,creneau,day))
 			res += "<a class='search_result' href='#' onClick='gotoDay("+day.start.date()+")'>"+day.start.date()+"/"+(currentMonth+1)+"</a> &nbsp;&nbsp;" ;
 
+		$("#res").addClass("animate");
 		$("#res").html(res);
+
 	}
 
 	function displayConnectForm()
   {
       $("#login-form").show();
       $("#notConnected").hide();
+  }
+
+  function displaySearchForm(){
+  	
+  	$("#displaySearchButton").addClass("rollRight");
+  	$("#formContainer").show();
+  	$("#formContainer").addClass("appear");
+  }
+  function hideSearchForm(e){
+  	e.preventDefault();
+  	$("#displaySearchButton").removeClass("rollRight");
+  	$("#formContainer").removeClass("appear");
+  	$("#formContainer").hide();
   }
 	/*********/
 
@@ -221,9 +250,19 @@
 			
 			var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +":"+buildSelect("fromMin",0,59,duree_reservee,"search_form");
 			var selectTo = buildSelect("toHour",0,24,1,"search_form") +":"+buildSelect("toMin",0,59,duree_reservee,"search_form");
-			var form = '<form onsubmit="handleSearchForm(event);" id="search_form">' + "FROM " + selectFrom + " -  TO"+ selectTo + 
-			'<button type="submit"><i class="fa fa-search"></i> Rechercher</button></form>'
-			$("#calendar_search_form").html(form + "<div id='res'></div>");
+			var selectDay = buildSelect("day",0,0,1,"search_form",weekday);
+			var form = "<div id='searchFormContainer'>"+
+			"<div id='displaySearchButton'> <button onClick='displaySearchForm()' ><i class='fa fa-search'></i> Rechercher un creneau selon une date</button></div>"+
+            "<div id='formContainer'><form onsubmit='handleSearchForm(event);' id='search_form'>"+
+              "<div class='col'>" + selectFrom + " </h2></div>"+ 
+              "<div class='col'>" +selectTo + " </div>"+
+              "<div class='col'>"+selectDay+ "</div>"+
+              "<button type='submit'><i class='fa fa-search'></i> Rechercher</button>"+
+              "<button id='cancelSearch' onClick='hideSearchForm(event)'><i class='fa fa-times'></i> Cancel</button>"+
+              "</form></div>"+
+              "</div>";
+              
+			$("#calendar_search_form").html(form + "<br/><div id='res'></div>");
 
 			$("#close-form").click(()=>{$("#form-container").hide()});
 

@@ -38,7 +38,7 @@ export default class LoginView extends React.Component {
     var view;
     console.log(this.props.loginObject);  
     if (this.props.loginObject.login) {
-      view = <LoginUserView handleLogout={this.handleLogout} login={this.props.loginObject.login}/>;
+      view = <LoginUserView handleLogout={this.handleLogout} login={this.props.loginObject}/>;
     } else {
       view = <LoginFormView handleLogin={this.handleLogin}/>;
     }

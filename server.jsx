@@ -70,6 +70,7 @@ app.use((req, res) => {
                 <div id="react-view">${componentHTML}</div>
                 <script src='/components/jquery/dist/jquery.min.js'></script>
                   <script src='/components/moment/min/moment.min.js'></script>
+                  <script src='/components/fullcalendar/dist/lang-all.js'></script>
                   <script src='/components/fullcalendar/dist/fullcalendar.min.js'></script>
                   <script src='/date2.js'></script>
                   <script src='/init.js'></script>
