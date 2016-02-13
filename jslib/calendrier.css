@@ -48,30 +48,41 @@
 }
 
 #res{
-  padding-top: -100px;
+  top: -40px;
   position: relative;
+  z-index:-1;
 }
 
 .animate{
     -webkit-animation: animate 2s forwards;
-    animation: animate 2s forwards;    
+    animation: animate 2s forwards;  
 }
 
 
 @-webkit-keyframes animate {
     100% {
-         padding-top:10px;
+         top:-10px;
+         z-index: 1;
     }
 }
 
 #searchFormContainer{
   width:100%;
-  height: 10px;
+  height: 20px;
+  z-index:10;
+  background-color: white;
 }
 
 .col{
   /*width:20%;*/
   float: left;
+  font-size: 0.8em;
+  margin-right: 10px;
+}
+
+.col span{
+  font-size: 0.5em;
+  font-style: italic;
 }
 
 #notConnected {
@@ -84,7 +95,15 @@
 }
 
 
-
+#dispoDay{
+  display: none;
+}
+#dispoDayDetail{
+display: none;
+}
+#duree{
+  display: none;
+}
 
 #notConnected{
 width: 200px;
@@ -175,7 +194,7 @@ right: 10px;
   border: 4px black solid;
   padding:5px;
   display: none;
-  position: fixed;
+  position: absolute;
    background-color: rgba(255, 255, 255, 0.9);
     z-index: 1000;
     width: 300px;

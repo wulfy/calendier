@@ -1,6 +1,6 @@
 export default function promiseMiddleware() {
   return next => action => {
-    const { promise, type, date, then, ...rest } = action;
+    const { promise, type, date, then, thenParams, ...rest } = action;
    
     if (!promise) return next(action);
    console.log('promise middleware ', action)
@@ -13,7 +13,11 @@ export default function promiseMiddleware() {
         next({ ...rest, res, date, dateEnd : Date.now(), type: SUCCESS });
         //gestion d'un éventuel callback
         if(typeof then != "undefined")
-          then();
+          {
+            console.log("then");
+            then(thenParams);
+          }
+
         return true;
       })
       .catch(error => {

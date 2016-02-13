@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-const defaultState = {data:{},type:{}};
+const defaultState = {data:"",type:{}};
 
 function dateToStr(vardate) {
   console.log("transforming" + vardate);

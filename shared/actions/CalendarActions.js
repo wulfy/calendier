@@ -24,14 +24,16 @@ export function getUserEvents()
   }
 }
 
-export function postBooking(formData,callback)
+export function postBooking(formData,callback,params)
 {
+  var headers = {withCredentials:true};
   console.log("booking");
   console.log(formData);
   return {
     type: 'POST_BOOKING',
-    promise: request.post(BACKEND_POST_URL,formData),
+    promise: request.post(BACKEND_POST_URL,formData,headers),
     then:callback,
+    thenParams:params,
     date: Date.now()
   }
 }

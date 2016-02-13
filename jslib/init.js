@@ -4,6 +4,8 @@
 	var previouscolor = '';
 	var reservationsBDD = [];
 	var user = null;
+	var selectedDay = null;
+	var free = null;
 	mylog("init");
 
 	function myMoment(data,format)
@@ -24,10 +26,6 @@
 
 			return convertedReservations;
 	}
-	function fadeOut(domid)
-	  {
-	    $( domid ).fadeOut( "slow");
-	  }
                   
 	function resetCalendarEvents(newEvents){
 		if(typeof calendarObject != "undefined")
@@ -38,7 +36,7 @@
 			calendarObject.fullCalendar('addEventSource',newEvents);
 		}
 	}
-	var free = null;
+	
 	function refreshView(view){
 		mylog("refreshView");
 		
@@ -51,6 +49,7 @@
 			case "month" :
 				    		//calendarObject.fullCalendar('removeEvents');
 				    		//freeMonth = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations);
+				    		hideResSearchForm();
 				    		freeData = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations,today);
 				    		freeMonth = freeData.freeMonth;
 				    		free = freeData.free;
@@ -72,7 +71,7 @@
 		
 	}
 
-	
+	/*********** REACT CONNECTORS ***************/
 	function updateReservations(reservationsFromReact){
 		mylog("update reservations");
 		reservationsBDD = convertDataToCalendarEvents(reservationsFromReact);
@@ -101,17 +100,19 @@
 	function setCurrentUser(userFromReact){
 		user = userFromReact;
 	}
+	/******************************************/
+
 	function getMine(reservations){
 		var mine = new Array();
-		console.log("user");
-		console.log(user);
+		mylog("user");
+		mylog(user);
 		if(user)
 			if(user.roles)
 				if(user.roles[0] == "ROLE_USER")
 					mine = reservations;
 				else{
 					reservations.forEach((element,index)=>{
-						console.log(element);
+						mylog(element);
 						if(element.idClient == user.id)
 							mine.push(element);
 					});
@@ -131,13 +132,6 @@
 
 		return false;
 
-		/*if(user)
-			reservations.forEach((element,index)=>{
-				if(element.idClient == user.id)
-					mine.push(element);
-			})
-
-		return mine;*/
 	}
 	function getReservationsFilter(eventObject){
 		if(!eventObject.free)
@@ -152,7 +146,9 @@
 		today.hour(0).seconds(0);
 		return !(date < today || offDays.indexOf(date.day())>=0 );
 	}
+ /***********************************************/
 
+ /****** SEARCH FORM TOOLS *********************/
 	function findFirstDate(frees,creneau,preferedDay){
 		var reservationsForWantedDay = new Array();
 		var propositions = new Array();
@@ -164,8 +160,8 @@
 			creneau.start.date(free.start.date());
 			creneau.end.date(free.end.date());
 			isWantedDay = (preferedDay?free.start.day()==preferedDay:true); 
-			console.log(preferedDay);
-			console.log(isWantedDay);
+			mylog(preferedDay);
+			mylog(isWantedDay);
 			if(free.start >= creneau.start && free.end <= creneau.end && free.start.date() != lastDay && isWantedDay){
 				lastDay = free.start.date();
 				propositions.push(free);
@@ -196,33 +192,64 @@
 				htmlOptions +='<option value="'+i+'">'+value+'</option>';
 		}	
 
-		selectHtml = "<select name='"+name+"' form='"+form+"'>"+htmlOptions+"</select>";
+		selectHtml = "<select name='"+name+"' form='"+form+"' >"+htmlOptions+"</select>";
 		return selectHtml;
 	}
 
 	function gotoDay(strDate)
 	{
 		var date = new myMoment(strDate,"DD-MM");
-		console.log(date);
+		mylog(date);
 		calendarObject.fullCalendar( 'gotoDate', date );
 		calendarObject.fullCalendar( 'changeView', 'agendaDay' );
 	}
+
+	function displaySearchResult(data,displayTime)
+	{
+		var searchResultObj = $("#res");
+		searchResultObj.show();
+		searchResultObj.addClass("animate");
+		searchResultObj.html(data);
+
+		if(Number.isInteger(displayTime))
+		{
+			 setTimeout(function(){ searchResultObj.removeClass("animate");  }, displayTime*1000); 
+		}
+	}
+
 	function handleSearchForm(e)
 	{
 		e.preventDefault();
-		var start = e.target.fromHour.value+":"+e.target.fromMin.value;
-		var end = e.target.toHour.value+":"+e.target.toMin.value;
-		var creneau = {start:myMoment(start,"HH:mm"),end:myMoment(end,"HH:mm")};
-		var day = e.target.day.value;
-		free = getMounthFreeCrenaux(creneau.start.month(),getReservationsBDD()).free;
+		
 		var res = "";
-		var currentMonth = calendarObject.fullCalendar( 'getView' ).intervalStart.month();
-		for(var day of findFirstDate(free,creneau,day))
-			res += "<a class='search_result' href='#' onClick='gotoDay("+day.start.date()+")'>"+day.start.date()+"/"+(currentMonth+1)+"</a> &nbsp;&nbsp;" ;
+		var displayTime = null;
+		if(e.target.fromHour.value && e.target.fromMin.value && 
+		   e.target.toHour.value && e.target.toMin.value)
+		{
+			var start = e.target.fromHour.value+":"+e.target.fromMin.value;
+			var end = e.target.toHour.value+":"+e.target.toMin.value;
+			var creneau = {start:myMoment(start,"HH:mm"),end:myMoment(end,"HH:mm")};
+			var day = e.target.day.value;
+			free = getMounthFreeCrenaux(creneau.start.month(),getReservationsBDD()).free;
+			var days = findFirstDate(free,creneau,day);
+			var currentMonth = calendarObject.fullCalendar( 'getView' ).intervalStart.month();
+			for(var currentday of days)
+				res += "<a class='search_result' href='#' onClick='gotoDay("+currentday.start.date()+")'>"+weekday[currentday.start.day()]+" " +
+						currentday.start.date()+"/"+(currentMonth+1)+"</a> &nbsp;&nbsp;" ;
 
-		$("#res").addClass("animate");
-		$("#res").html(res);
-
+			if(days.length <1)
+			{
+				res = "Aucun creneau trouvé. Essayez avec une période différente";
+				displayTime = 5;
+			}
+		}else
+		{
+			mylog(e.target.toHour.value);
+			 res = "Veuillez sélectionner une heure de début et de fin";
+			 displayTime = 5;
+		}
+		displaySearchResult(res,displayTime);
+		
 	}
 
 	function displayConnectForm()
@@ -237,34 +264,66 @@
   	$("#formContainer").show();
   	$("#formContainer").addClass("appear");
   }
+  function hideResSearchForm(){
+  		$("#res").removeClass("animate");
+  		$("#res").hide();
+  }
+
   function hideSearchForm(e){
   	e.preventDefault();
   	$("#displaySearchButton").removeClass("rollRight");
   	$("#formContainer").removeClass("appear");
   	$("#formContainer").hide();
+  	hideResSearchForm();
+  	
+  }
+
+/****************************************/
+/** TOOLS FOR CALENDAR
+******************************************/
+  function toggleSelectCreneau(element){
+  	
+  	if(selectedDay)
+  	{
+		selectedDay.css('background-color', previouscolor);
+		selectedDay.children('.text').hide();
+		previouscolor = null;
+	}
+    
+    if(element)
+    {
+    	previouscolor = element.css('background-color');
+  		element.css('background-color', 'red');
+    	element.children('.text').show();
+    	selectedDay = element;
+	}
   }
 	/*********/
 
 		$(document).ready(function() {
 
 			
-			var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +":"+buildSelect("fromMin",0,59,duree_reservee,"search_form");
-			var selectTo = buildSelect("toHour",0,24,1,"search_form") +":"+buildSelect("toMin",0,59,duree_reservee,"search_form");
+			var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +" : "+buildSelect("fromMin",0,59,duree_reservee,"search_form");
+			var selectTo = buildSelect("toHour",0,24,1,"search_form") +" : "+buildSelect("toMin",0,59,duree_reservee,"search_form");
 			var selectDay = buildSelect("day",0,0,1,"search_form",weekday);
 			var form = "<div id='searchFormContainer'>"+
 			"<div id='displaySearchButton'> <button onClick='displaySearchForm()' ><i class='fa fa-search'></i> Rechercher un creneau selon une date</button></div>"+
             "<div id='formContainer'><form onsubmit='handleSearchForm(event);' id='search_form'>"+
-              "<div class='col'>" + selectFrom + " </h2></div>"+ 
-              "<div class='col'>" +selectTo + " </div>"+
-              "<div class='col'>"+selectDay+ "</div>"+
+              "<div class='col time'> <i class='fa fa-clock-o'></i> Heure début* " + selectFrom + " </div>"+ 
+              "<div class='col time'><i class='fa fa-clock-o'></i> Heure fin* " +selectTo + " </div>"+
+              "<div class='col day'> Jour <span>(optionnel)</span>"+selectDay+ "</div>"+
               "<button type='submit'><i class='fa fa-search'></i> Rechercher</button>"+
               "<button id='cancelSearch' onClick='hideSearchForm(event)'><i class='fa fa-times'></i> Cancel</button>"+
               "</form></div>"+
               "</div>";
               
-			$("#calendar_search_form").html(form + "<br/><div id='res'></div>");
+			$("#calendar_search_form").html(form + "<br/><div id='res' class='message'>RES</div>");
 
-			$("#close-form").click(()=>{$("#form-container").hide()});
+			$("#close-form").click(()=>{
+				$("#form-container").hide()
+				toggleSelectCreneau();
+					}
+				);
 
 	
     		/*$("#notConnected").hover(function(){
@@ -336,23 +395,22 @@
 						  var relativeY = offset.top-150;
 					        $("#form-container").show();
 					        $("#form-container").css({left: relativeX,top:relativeY});
+					        selectedDay = $(this);
 					    }
 
 
 			    },
 			    eventMouseover:function(calEvent, jsEvent, view) {
-			    	previouscolor = $(this).css('background-color');
+			    	
 			    	if(calEvent.clickable === true)
     				{
-    					$(this).css('background-color', 'red');
-    					$(this).children('.text').show();
+    					toggleSelectCreneau($(this));
     				}
 			    },
 			    eventMouseout:function(calEvent, jsEvent, view) {
-			    	if(calEvent.clickable === true)
+			    	if(calEvent.clickable === true && selectedDay==null)
     				{
-    					$(this).css('background-color', previouscolor);
-    					$(this).children('.text').hide();
+    					toggleSelectCreneau($(this));
     				}
 			    },
 			    dayClick: function(date, jsEvent, view) {
