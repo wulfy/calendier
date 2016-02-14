@@ -41,7 +41,7 @@
 		mylog("refreshView");
 		
 		var events = new Array();
-		var today = new moment().utcOffset('+0100');
+		var today = new myMoment(1, "HH");
 		var currentReservations = getReservationsBDD();//calendarObject.fullCalendar( 'clientEvents',getReservationsFilter);
 		mylog(currentReservations);
 		switch(view.name)
