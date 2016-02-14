@@ -13,7 +13,7 @@
 		return moment(data,format).utcOffset('+0100');
 	}
 
-	function convertDataToCalendarEvents(reservations)
+	/*function convertDataToCalendarEvents(reservations)
 	{
 			var convertedReservations = reservations;
 
@@ -25,9 +25,9 @@
 			}
 
 			return convertedReservations;
-	}
+	}*/
                   
-	function resetCalendarEvents(newEvents){
+	/*function resetCalendarEvents(newEvents){
 		if(typeof calendarObject != "undefined")
 		{
 			mylog("reset calendar");
@@ -35,9 +35,9 @@
 			calendarObject.fullCalendar('removeEvents');
 			calendarObject.fullCalendar('addEventSource',newEvents);
 		}
-	}
+	}*/
 	
-	function refreshView(view){
+	/*function refreshView(view){
 		mylog("refreshView");
 		
 		var events = new Array();
@@ -72,11 +72,11 @@
 	}
 
 	/*********** REACT CONNECTORS ***************/
-	function updateReservations(reservationsFromReact){
+	/*function updateReservations(reservationsFromReact){
 		mylog("update reservations");
 		reservationsBDD = convertDataToCalendarEvents(reservationsFromReact);
 		refreshView(calendarObject.fullCalendar( 'getView'));
-	}
+	}*/
 	function updateParams(paramsFromReact){
 		if(paramsFromReact)
 		{
@@ -89,7 +89,7 @@
 			}
 		}
 	}
-
+/*
 	function getReservationsBDD(){
 		if(reservationsBDD)
 			return reservationsBDD;
@@ -102,7 +102,7 @@
 	}
 	/******************************************/
 
-	function getMine(reservations){
+	/*function getMine(reservations){
 		var mine = new Array();
 		mylog("user");
 		mylog(user);
@@ -281,7 +281,7 @@
 /****************************************/
 /** TOOLS FOR CALENDAR
 ******************************************/
-  function toggleSelectCreneau(element){
+  /*function toggleSelectCreneau(element){
   	
   	if(selectedDay)
   	{
@@ -337,7 +337,7 @@
 		    mylog(reservations[2]);**/
 		    mylog("generating calendar");
 		    //mylog(events);
-		    calendarObject.fullCalendar({
+		   /* calendarObject.fullCalendar({
 		    	header: {
 					left: 'prev,next today',
 					center: 'title',
@@ -437,7 +437,7 @@
 			    }
 
 
-		    })
+		    })*/
 
 		    
 

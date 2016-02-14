@@ -165,7 +165,7 @@ mylog("getMounthFreeCrenaux " + realMonth + " " + searchedMonth);
   {
     mylog("in");
 
-        currentFree=getCreauxLibresHelper(startDate,reservations);
+        currentFree=getCreauxLibresHelper(startDate,reservations,true);
 
         for(var libres of currentFree.libresliste)
         {

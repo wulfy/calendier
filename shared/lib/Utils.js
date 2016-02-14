@@ -1,11 +1,37 @@
+var moment = require('moment');
 
+const DEBUG_MODE = false;
 
-export function myLog(data)
+export function mylog(text){
+    if(DEBUG_MODE)
+      console.log(text);
+  }
+
+export function convertDataToCalendarEvents(reservations)
 {
-  var console = {};
-  console.log = function(){};
+      var convertedReservations = reservations;
+
+      if(reservations)
+      for(var i=0;i<reservations.length;i++)
+      {
+        convertedReservations[i].start = myMoment(reservations[i].start);
+        convertedReservations[i].end = myMoment(reservations[i].end);
+      }
+
+      return convertedReservations;
 }
 
+export function myMoment(data,format)
+  {
+    return moment(data,format).utcOffset('+0100');
+  }
+
+export function isClickableDate(date,offDays)
+  {
+    var today = new moment();
+    today.hour(0).seconds(0);
+    return !(date < today || offDays.indexOf(date.day())>=0 );
+  }
 
 
 

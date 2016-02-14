@@ -16,7 +16,7 @@ export default class LoginContainer extends React.Component {
         $("#login-message").show();
         //hide message container after 5 seconds
         setTimeout(function(){fadeOut("#login-message")},5000);
-        setCurrentUser(login);
+        //setCurrentUser(login);
     }
 	render()
 	{
