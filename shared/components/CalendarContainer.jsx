@@ -144,7 +144,7 @@ export default class CalendarContainer extends React.Component {
         return mine;
     }
     updateReservations = (newevents) => {
-      var today = new moment().utcOffset('+0100');
+      var today = new myMoment(1, "HH");
       var view = $('#calendar').fullCalendar( 'getView' );
       this.state.currentReservations = convertDataToCalendarEvents(newevents);
 
@@ -191,7 +191,8 @@ export default class CalendarContainer extends React.Component {
                     //calendarObject.fullCalendar('addEventSource',events);
                     break;
           case "agendaDay" :
-                    previousDay = $(this);
+                    //previousDay = $(this);
+                    //var free = getCreauxLibresHelper(myMoment(view.intervalStart),this.state.currentReservations,true).free;
                     events.push(...this.state.currentReservations,...this.state.free);
                     this.resetCalendarEvents(events);
                     break;

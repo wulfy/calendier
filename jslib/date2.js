@@ -134,7 +134,6 @@ function getCreauxLibresHelper(dateDay,reservationforday,clickable){
           mylog(currentStartDuree.clone());
          dateStart.hour(currentStartDuree.hour()).minute(currentStartDuree.minute()).second(0);
          dateEnd.hour(currentEndDuree.hours()).minute(currentEndDuree.minute()).second(0);
-
          libres = getFreeTimeForDuration(dateStart,dateEnd,reservationforday,duree_reservee,clickable);
          frees.push(...libres);
          total += libres.length;
@@ -176,7 +175,7 @@ mylog("getMounthFreeCrenaux " + realMonth + " " + searchedMonth);
             allFree.push(...libres.frees);
           }
         }
-    
+        
 
         startDate.add(1,"d");
         watchDog++;
