@@ -35,7 +35,8 @@ export default class CalendarContainer extends React.Component {
 
                 var height = document.body.clientHeight;
                 var width = document.body.clientWidth;
-                reactThis.state.previouscolor = $(this).css('border-color');
+                var currentObj = $(jsEvent.currentTarget);
+                reactThis.state.previouscolor = currentObj.css('border-color');
 
                 if(calEvent.clickable === true)
                 {
@@ -45,7 +46,7 @@ export default class CalendarContainer extends React.Component {
                       $("#dateEnd").val(calEvent.end);
                       $("#creneauForm").html( "Créneau de :" + calEvent.start.format("HH:mm")+" - "+ calEvent.end.format("HH:mm"));
                       $("#id").val(calEvent.id);
-                      crenaux = getCreauxLibresHelper(calEvent.start,reactThis.state.currentReservations);
+                      var crenaux = getCreauxLibresHelper(calEvent.start,reactThis.state.currentReservations);
                       $("#dispoDay").val(crenaux.total);
                       var creneauxString = "";
                       for(var value of crenaux.libresliste){
@@ -55,11 +56,11 @@ export default class CalendarContainer extends React.Component {
                       mylog(creneauxString);
                       mylog(calEvent);
 
-                      if(previousEvent != null)
+                      /*if(previousEvent != null)
                         previousEvent.css('border-color', reactThis.state.previouscolor);
 
-                      previousEvent = $(this);
-                      var offset = $(this).offset();
+                      previousEvent = currentObj;*/
+                      var offset = currentObj.offset();
                       var decalage = 150;
                       var relativeX = 0;
 
@@ -71,7 +72,7 @@ export default class CalendarContainer extends React.Component {
                   var relativeY = offset.top-150;
                       $("#form-container").show();
                       $("#form-container").css({left: relativeX,top:relativeY});
-                      reactThis.state.selectedDay = $(this);
+                      reactThis.state.selectedDay = currentObj;
                   }
 
 
@@ -79,13 +80,13 @@ export default class CalendarContainer extends React.Component {
               eventMouseover:function(calEvent, jsEvent, view) {
                 if(calEvent.clickable === true)
                 {
-                  reactThis.toggleSelectCreneau($('this'));
+                  reactThis.toggleSelectCreneau($(jsEvent.currentTarget));
                 }
               }.bind(reactThis),
               eventMouseout:function(calEvent, jsEvent, view) {
                 if(calEvent.clickable === true && this.state.selectedDay==null)
                 {
-                  reactThis.toggleSelectCreneau($('this'));
+                  reactThis.toggleSelectCreneau($(jsEvent.currentTarget));
                 }
               }.bind(reactThis),
               dayClick: function(date, jsEvent, view) {
@@ -155,8 +156,6 @@ export default class CalendarContainer extends React.Component {
 
     }
     toggleSelectCreneau= (element) => {
-    console.log("creneau");
-    console.log(element);
       if(this.state.selectedDay)
       {
         this.state.selectedDay.css('background-color', this.state.previouscolor);

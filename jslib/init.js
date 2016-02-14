@@ -321,7 +321,6 @@
 
 			$("#close-form").click(()=>{
 				$("#form-container").hide()
-				toggleSelectCreneau();
 					}
 				);
 
