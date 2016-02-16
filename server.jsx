@@ -72,8 +72,6 @@ app.use((req, res) => {
                   <script src='/components/moment/min/moment.min.js'></script>
                   <script src='/components/fullcalendar/dist/fullcalendar.min.js'></script>
                   <script src='/components/fullcalendar/dist/lang-all.js'></script>
-                  <script src='/date2.js'></script>
-                  <script src='/init.js'></script>
                 <script type="application/javascript" src="/bundle.js"></script>
               </body>
           </html>    

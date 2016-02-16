@@ -1,4 +1,7 @@
 /***************/
+.selectBoxes{
+  float: right;
+}
 
 @-webkit-keyframes rollrightanimation {
     100% {
@@ -48,7 +51,7 @@
 }
 
 #res{
-  top: -40px;
+  top: -20px;
   position: relative;
   z-index:-1;
 }
@@ -61,14 +64,15 @@
 
 @-webkit-keyframes animate {
     100% {
-         top:-10px;
+         top:5px;
          z-index: 1;
     }
 }
 
 #searchFormContainer{
   width:100%;
-  height: 20px;
+  margin-bottom: 10px;
+  min-height: 20px;
   z-index:10;
   background-color: white;
 }
@@ -121,6 +125,8 @@ right: 0px;
 
 .search_result, .search_result:visited{
   color:grey;
+  margin-right: 5px;
+   border-right-style: solid 1px grey;
 }
 
 #login-form{

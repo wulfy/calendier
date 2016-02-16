@@ -3,14 +3,30 @@ import { bindActionCreators } from 'redux';
 import * as CalendarActions       from 'actions/CalendarActions';
 import { connect }            from 'react-redux';
 import {mylog,convertDataToCalendarEvents,myMoment,isClickableDate}  from 'lib/Utils';
+import SearchContainer       from 'components/SearchContainer';
+var tools = require('lib/calendar_tools');
 
-
-@connect(state => ({ events: state.calendar, login: state.login}))
+@connect(state => ({ events: state.calendar, login: state.login, calendarParams: state.calendarParams}))
 export default class CalendarContainer extends React.Component {
 
+    componentWillMount= () => {
+      this.calendarObject = '';
+      this.currentReservations = '';
+      this.freeMonth='';
+      this.free = '';
+      this.mine = '';
+      this.selectedDay = '';
+      this.previouscolor = '';
+      this.blockSelectedDay = false;
+      this.offDays = [0];
+      
+    }
     componentDidMount = ()=>{
-      this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:''};
-      this.updateReservations(this.props.events.reservations);
+      console.log("didmount start");
+      //do not use state, use data in "component will mount"
+      this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:'',blockSelectedDay:false};
+      this.updateReservations();
+      this.offDays = [0];
       this.state.calendarObject = $('#calendar');
       var reactThis = this;
       this.state.calendarObject.fullCalendar({
@@ -27,6 +43,7 @@ export default class CalendarContainer extends React.Component {
               maxTime: '22:00',
               displayEventEnd : true,
               lang:'fr',
+              allDaySlot:false,
               defaultDate: new moment(),
               eventRender: function(event, element, view){
                 element.append('<p class="text">RESERVER</p>');
@@ -46,7 +63,7 @@ export default class CalendarContainer extends React.Component {
                       $("#dateEnd").val(calEvent.end);
                       $("#creneauForm").html( "Créneau de :" + calEvent.start.format("HH:mm")+" - "+ calEvent.end.format("HH:mm"));
                       $("#id").val(calEvent.id);
-                      var crenaux = getCreauxLibresHelper(calEvent.start,reactThis.state.currentReservations);
+                      /*var crenaux = getCreauxLibresHelper(calEvent.start,reactThis.state.currentReservations);
                       $("#dispoDay").val(crenaux.total);
                       var creneauxString = "";
                       for(var value of crenaux.libresliste){
@@ -54,7 +71,7 @@ export default class CalendarContainer extends React.Component {
                       };
                       $("#dispodetail").val(creneauxString);
                       mylog(creneauxString);
-                      mylog(calEvent);
+                      mylog(calEvent);*/
 
                       /*if(previousEvent != null)
                         previousEvent.css('border-color', reactThis.state.previouscolor);
@@ -72,7 +89,12 @@ export default class CalendarContainer extends React.Component {
                   var relativeY = offset.top-150;
                       $("#form-container").show();
                       $("#form-container").css({left: relativeX,top:relativeY});
-                      reactThis.state.selectedDay = currentObj;
+                      $("#close-form").click(()=>{
+                          $("#form-container").hide();
+                          reactThis.blockSelectedDay = false;
+                          }
+                        );
+                      reactThis.blockSelectedDay = true;
                   }
 
 
@@ -80,7 +102,7 @@ export default class CalendarContainer extends React.Component {
               eventMouseover:function(calEvent, jsEvent, view) {
                 if(calEvent.clickable === true)
                 {
-                  reactThis.toggleSelectCreneau($(jsEvent.currentTarget));
+                  this.toggleSelectCreneau($(jsEvent.currentTarget));
                 }
               }.bind(reactThis),
               eventMouseout:function(calEvent, jsEvent, view) {
@@ -90,10 +112,10 @@ export default class CalendarContainer extends React.Component {
                 }
               }.bind(reactThis),
               dayClick: function(date, jsEvent, view) {
-                if(isClickableDate(date,offDays))
+                if(isClickableDate(date,this.offDays))
                 {
-                  reactThis.state.calendarObject.fullCalendar( 'gotoDate', date );
-                  reactThis.state.calendarObject.fullCalendar( 'changeView', 'agendaDay' );
+                  this.state.calendarObject.fullCalendar( 'gotoDate', date );
+                  this.state.calendarObject.fullCalendar( 'changeView', 'agendaDay' );
                 }
                 
               }.bind(reactThis),
@@ -103,10 +125,10 @@ export default class CalendarContainer extends React.Component {
                   reactThis.refreshView(view);
               }.bind(reactThis),
               dayRender:function( date, cell ) { 
-                  if(!isClickableDate(date,offDays))
+                  if(!isClickableDate(date,reactThis.offDays))
                     cell[0].bgColor="grey";
 
-              }
+              }.bind(reactThis)
 
 
             });
@@ -116,10 +138,9 @@ export default class CalendarContainer extends React.Component {
       
   	
     componentDidUpdate =(prevProps,prevState)=>{
-      var { events, dispatch} = this.props;
           console.log("update");
 
-         this.updateReservations(events.reservations);
+         this.updateReservations();
          this.refreshView($('#calendar').fullCalendar( 'getView' ));
             /*var free = getCreauxLibresHelper(current,events.reservations,true).free;
             newevents.push(...reservationsBDD,...free);
@@ -143,12 +164,16 @@ export default class CalendarContainer extends React.Component {
           
         return mine;
     }
-    updateReservations = (newevents) => {
+    updateReservations = () => {
+      var { events, calendarParams} = this.props;
+
+      var newevents = events.reservations;
+      var duree = calendarParams.duree;
+      var periodes = calendarParams.bookablePeriods;
       var today = new myMoment(1, "HH");
-      var view = $('#calendar').fullCalendar( 'getView' );
       this.state.currentReservations = convertDataToCalendarEvents(newevents);
 
-      var freeData = getMounthFreeCrenaux(1,this.state.currentReservations,today);
+      var freeData = tools.getMounthFreeCrenaux(1,this.state.currentReservations,periodes,duree,today);
 
       this.state.freeMonth = freeData.freeMonth;
       this.state.free = freeData.free;
@@ -156,19 +181,22 @@ export default class CalendarContainer extends React.Component {
 
     }
     toggleSelectCreneau= (element) => {
-      if(this.state.selectedDay)
+      if(!this.blockSelectedDay)
       {
-        this.state.selectedDay.css('background-color', this.state.previouscolor);
-        this.state.selectedDay.children('.text').hide();
-        this.state.previouscolor = null;
-      }
-      
-      if(element)
-      {
-        this.state.previouscolor = element.css('background-color');
-        element.css('background-color', 'red');
-        element.children('.text').show();
-        this.state.selectedDay = element;
+        if(this.state.selectedDay )
+        {
+          this.state.selectedDay.css('background-color', this.state.previouscolor);
+          this.state.selectedDay.children('.text').hide();
+          this.state.previouscolor = null;
+        }
+        
+        if(element)
+        {
+          this.state.previouscolor = element.css('background-color');
+          element.css('background-color', 'red');
+          element.children('.text').show();
+          this.state.selectedDay = element;
+        }
       }
 
     }
@@ -184,7 +212,8 @@ export default class CalendarContainer extends React.Component {
           case "month" :
                     //calendarObject.fullCalendar('removeEvents');
                     //freeMonth = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations);
-                    hideResSearchForm();
+                    $("#res").removeClass("animate");
+                    $("#res").hide();
                     console.log("month refresh");
                     events.push(...this.state.freeMonth,...this.state.mine);
                     this.resetCalendarEvents(events);
@@ -208,6 +237,12 @@ export default class CalendarContainer extends React.Component {
       this.state.calendarObject.fullCalendar('addEventSource',newEvents);
     }
   }
+  getFreeHandler = () => {
+    return this.state.free;
+  }
+  getCalendarObjHandler = () => {
+    return this.state.calendarObject;
+  }
 	render()
 	{
 		  console.log("STATE RENDERING CALENDAR CONTAINER : ");
@@ -215,6 +250,7 @@ export default class CalendarContainer extends React.Component {
           
 		return (
 			<div id="calendar-container">
+            <SearchContainer getFree={this.getFreeHandler} getCalendarObj={this.getCalendarObjHandler}/>
 	      		<div id="calendar">
 	      		</div>
       		</div>

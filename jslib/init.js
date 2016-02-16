@@ -204,7 +204,7 @@
 		calendarObject.fullCalendar( 'changeView', 'agendaDay' );
 	}
 
-	function displaySearchResult(data,displayTime)
+	/*function displaySearchResult(data,displayTime)
 	{
 		var searchResultObj = $("#res");
 		searchResultObj.show();
@@ -215,7 +215,7 @@
 		{
 			 setTimeout(function(){ searchResultObj.removeClass("animate");  }, displayTime*1000); 
 		}
-	}
+	}*/
 
 	function handleSearchForm(e)
 	{
@@ -258,25 +258,25 @@
       $("#notConnected").hide();
   }
 
-  function displaySearchForm(){
+  /*function displaySearchForm(){
   	
   	$("#displaySearchButton").addClass("rollRight");
   	$("#formContainer").show();
   	$("#formContainer").addClass("appear");
-  }
+  }*/
   function hideResSearchForm(){
   		$("#res").removeClass("animate");
   		$("#res").hide();
   }
 
-  function hideSearchForm(e){
+  /*function hideSearchForm(e){
   	e.preventDefault();
   	$("#displaySearchButton").removeClass("rollRight");
   	$("#formContainer").removeClass("appear");
   	$("#formContainer").hide();
   	hideResSearchForm();
   	
-  }
+  }*/
 
 /****************************************/
 /** TOOLS FOR CALENDAR
@@ -303,7 +303,7 @@
 		$(document).ready(function() {
 
 			
-			var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +" : "+buildSelect("fromMin",0,59,duree_reservee,"search_form");
+			/*var selectFrom = buildSelect("fromHour",0,24,1,"search_form") +" : "+buildSelect("fromMin",0,59,duree_reservee,"search_form");
 			var selectTo = buildSelect("toHour",0,24,1,"search_form") +" : "+buildSelect("toMin",0,59,duree_reservee,"search_form");
 			var selectDay = buildSelect("day",0,0,1,"search_form",weekday);
 			var form = "<div id='searchFormContainer'>"+

@@ -8,7 +8,7 @@ export default class CalendarParamsContainer extends React.Component {
 
     componentDidMount = () =>{
     	//var { events, dispatch} = this.props;
-      updateParams(this.props.calendarParams);
+      //updateParams(this.props.calendarParams);
       console.log("didmount params");
 
   	}
