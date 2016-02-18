@@ -2,11 +2,12 @@ import React     from 'react';
 import { Route } from 'react-router';
 
 import App from 'components';
-import Home from 'components/Home';
+import Calendrier from 'components/Calendrier';
+
 
 
 export default (
   <Route name="app" component={App} path="/">
-    <Route component={Home} path="calendrier/:userId" />
+    <Route component={Calendrier} path="calendrier/:userId" />
   </Route>
 );

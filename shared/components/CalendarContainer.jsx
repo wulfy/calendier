@@ -1,6 +1,7 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import * as CalendarActions       from 'actions/CalendarActions';
+import * as BookFormActions       from 'actions/BookFormActions';
 import { connect }            from 'react-redux';
 import {mylog,convertDataToCalendarEvents,myMoment,isClickableDate}  from 'lib/Utils';
 import SearchContainer       from 'components/SearchContainer';
@@ -19,7 +20,8 @@ export default class CalendarContainer extends React.Component {
       this.previouscolor = '';
       this.blockSelectedDay = false;
       this.offDays = [0];
-      
+      this.login = null;
+      this.displayLoginBox = false;
     }
     componentDidMount = ()=>{
       console.log("didmount start");
@@ -29,6 +31,7 @@ export default class CalendarContainer extends React.Component {
       this.offDays = [0];
       this.state.calendarObject = $('#calendar');
       var reactThis = this;
+      var {dispatch} = this.props;
       this.state.calendarObject.fullCalendar({
               header: {
               left: 'prev,next today',
@@ -46,7 +49,7 @@ export default class CalendarContainer extends React.Component {
               allDaySlot:false,
               defaultDate: new moment(),
               eventRender: function(event, element, view){
-                element.append('<p class="text">RESERVER</p>');
+                  element.append('<p class="text">RESERVER</p>');
               },
               eventClick: function(calEvent, jsEvent, view) {
 
@@ -57,44 +60,25 @@ export default class CalendarContainer extends React.Component {
 
                 if(calEvent.clickable === true)
                 {
-                     
-                      $("#title").val(calEvent.title);
-                      $("#dateStart").val(calEvent.start);
-                      $("#dateEnd").val(calEvent.end);
-                      $("#creneauForm").html( "Créneau de :" + calEvent.start.format("HH:mm")+" - "+ calEvent.end.format("HH:mm"));
-                      $("#id").val(calEvent.id);
-                      /*var crenaux = getCreauxLibresHelper(calEvent.start,reactThis.state.currentReservations);
-                      $("#dispoDay").val(crenaux.total);
-                      var creneauxString = "";
-                      for(var value of crenaux.libresliste){
-                        creneauxString += value.title + " - " + value.frees.length+"\n" ;
-                      };
-                      $("#dispodetail").val(creneauxString);
-                      mylog(creneauxString);
-                      mylog(calEvent);*/
-
-                      /*if(previousEvent != null)
-                        previousEvent.css('border-color', reactThis.state.previouscolor);
-
-                      previousEvent = currentObj;*/
                       var offset = currentObj.offset();
                       var decalage = 150;
                       var relativeX = 0;
-
+                      var text = "Créneau de :" + calEvent.start.format("HH:mm")+" - "+ calEvent.end.format("HH:mm");
                       if((offset.left + 400) < width)
                         relativeX = offset.left + decalage;
                       else
                       relativeX = offset.left - decalage*2;
 
                   var relativeY = offset.top-150;
-                      $("#form-container").show();
                       $("#form-container").css({left: relativeX,top:relativeY});
                       $("#close-form").click(()=>{
-                          $("#form-container").hide();
                           reactThis.blockSelectedDay = false;
                           }
                         );
                       reactThis.blockSelectedDay = true;
+                      console.log(calEvent.start.unix());
+                      console.log("start");
+                      dispatch(BookFormActions.displayForm(calEvent.title,calEvent.start.toDate(),calEvent.end.toDate(),calEvent.id,text,this.props.login.login, this.props.calendarParams.message));
                   }
 
 
@@ -106,9 +90,9 @@ export default class CalendarContainer extends React.Component {
                 }
               }.bind(reactThis),
               eventMouseout:function(calEvent, jsEvent, view) {
-                if(calEvent.clickable === true && this.state.selectedDay==null)
+                if(calEvent.clickable === true)
                 {
-                  reactThis.toggleSelectCreneau($(jsEvent.currentTarget));
+                  this.toggleSelectCreneau();
                 }
               }.bind(reactThis),
               dayClick: function(date, jsEvent, view) {
@@ -120,8 +104,6 @@ export default class CalendarContainer extends React.Component {
                 
               }.bind(reactThis),
               viewRender: function( view, element ) {
-                  $("#form-container").hide();
-                  mylog("viewRender "+view.name);
                   reactThis.refreshView(view);
               }.bind(reactThis),
               dayRender:function( date, cell ) { 
@@ -139,7 +121,9 @@ export default class CalendarContainer extends React.Component {
   	
     componentDidUpdate =(prevProps,prevState)=>{
           console.log("update");
-
+          var {login} = this.props;
+          this.login = login.login;
+          this.blockSelectedDay = false;
          this.updateReservations();
          this.refreshView($('#calendar').fullCalendar( 'getView' ));
             /*var free = getCreauxLibresHelper(current,events.reservations,true).free;
@@ -202,7 +186,7 @@ export default class CalendarContainer extends React.Component {
     }
     refreshView = (view)=> {
         mylog("refreshView");
-        
+        this.blockSelectedDay = false;
         var events = new Array();
         var today = new moment().utcOffset('+0100');
         var currentReservations = this.state.currentReservations;//calendarObject.fullCalendar( 'clientEvents',getReservationsFilter);
@@ -246,8 +230,8 @@ export default class CalendarContainer extends React.Component {
 	render()
 	{
 		  console.log("STATE RENDERING CALENDAR CONTAINER : ");
-    	var { events, dispatch} = this.props;
-          
+    	var { events, dispatch, login} = this.props;
+      var loginpopinClass = (login.login || !this.displayLoginBox)?"hide":"show";
 		return (
 			<div id="calendar-container">
             <SearchContainer getFree={this.getFreeHandler} getCalendarObj={this.getCalendarObjHandler}/>

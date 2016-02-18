@@ -20,7 +20,7 @@ export default function messageReducer(state = defaultState, action) {
       return {data:action.res.data,type:action.type,display:"OK"} ;
     case 'BOOK_DATE_COMMAND_FAILURE':
     case 'POST_BOOKING_FAILURE':
-      return {data:action.error.statusText,type:action.type,display:"error"} ;
+      return {data:action.error.data, error:action.error.statusText,type:action.type,display:"error"} ;
     case 'BOOK_DATE_COMMAND_REQUEST':
       return {data:action.res.data,type:action.type,display:"OK"} ;
     case 'GET_EVENTS_FAILURE':

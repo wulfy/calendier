@@ -2,6 +2,10 @@ import React from 'react';
 
 export default class FormView extends React.Component {
 
+  componentWillMount = () => {
+    console.log("will mount");
+    this.setState({titleValue: this.props.formData.title, message:""});
+  }
   handleInputChange = (e) => {
     var id = e.target.id;
     this.setState({id: e.target.value});
@@ -13,19 +17,32 @@ export default class FormView extends React.Component {
     this.props.postBooking(data,this.props.getEvents,{userId:this.props.userId});
     
   }
+  handleTitleChange = (e) => {
+    this.setState({titleValue: e.target.value});
+  }
+  hideMessage = () => {
+    console.log("hide");
+    this.setState({message:""});
+  }
+  componentWillReceiveProps= (nextProps) => {
+    console.log("will receive props");
+      this.setState({message:nextProps.message});
+      setTimeout(function(){ this.hideMessage(); }.bind(this), 3000);
+  }
 	render()
 	{
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
-
+      console.log("RENDER formview");
+      var {formData} = this.props;
 		return (
            <form id="event-form" onSubmit={this.handleBook}>
-              Titre : <input id="title" name="title" type="text" required/>
-              <br/><input id="dateStart" name="start" type="hidden" />
-              <input id="dateEnd" name="end" type="hidden" />
+              Titre : <input id="title" name="title" type="text" value={this.state.titleValue} onChange={this.handleTitleChange} required />
+              <br/><input id="dateStart" name="start" type="hidden" value={formData.start}/>
+              <input id="dateEnd" name="end" type="hidden" value={formData.end} />
               <input id="userid" name="userid" type="hidden" value={this.props.userId}/>
-              <button id="cancel" type="cancel"><i className="fa fa-calendar-times-o">Annuler</i></button>
+              <button id="cancel" type="cancel" onClick={this.props.handleCloseForm}><i className="fa fa-calendar-times-o">Annuler</i></button>
               <button id="reserver" type="submit"><i className="fa fa-calendar-check-o">Reserver</i></button>
-              <div>{this.props.message}</div>
+              <div>{this.state.message}</div>
             </form>
       		);
 	}
