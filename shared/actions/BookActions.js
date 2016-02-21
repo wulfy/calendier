@@ -1,11 +1,4 @@
 import request from 'axios';
-const BACKEND_URL = 'http://192.168.1.27:8080/json.htm?';
-const REQUEST_STATUS_URL = BACKEND_URL + 'type=devices&filter=all&used=true&order=Name&plan=0&lastupdate=1451569488';
-
-function getSwitchCommand(deviceId,switchCommand)
-{
-  return BACKEND_URL + "type=command&param=switchlight&idx="+deviceId+"&switchcmd="+switchCommand+"&level=0&passcode=";
-}
 
 
 

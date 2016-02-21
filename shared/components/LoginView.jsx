@@ -4,6 +4,11 @@ import LoginFormView              from 'components/LoginFormView';
 
 export default class LoginView extends React.Component {
 
+  componentWillMount =()=>{
+        console.log("didmount login");
+        //permet d'afficher le gif d'attente
+        this.wait = true;
+  }
   componentDidMount =(prevProps,prevState)=>{
     this.props.connectUser(null,this.refreshUserEvents);
   }
@@ -33,6 +38,11 @@ export default class LoginView extends React.Component {
     console.log("handlelogout");
     this.props.logoutUser(this.refreshUserEvents);    
   }
+  componentWillUpdate =(nextProps,nextState)=>{
+    console.log("will update");
+    if(this.wait)
+            this.wait = false;
+  }
 	render()
 	{
     var view;
@@ -42,6 +52,8 @@ export default class LoginView extends React.Component {
     } else {
       view = <LoginFormView handleLogin={this.handleLogin}/>;
     }
+
+    view= this.wait?<img className="waitingimg" src="http://i.stack.imgur.com/MnyxU.gif"/>:<div>{view}</div>;
 
 		return (
            <div id="login-view">

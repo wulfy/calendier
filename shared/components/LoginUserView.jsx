@@ -6,7 +6,7 @@ export default class LoginUserView extends React.Component {
 	{
 		var iconClass = "";
 		if(this.props.login.roles[0]=="ROLE_USER")
-			iconClass = "fa-user-secret";
+			iconClass = "fa fa-user-secret";
 		else
 			iconClass = "fa fa-user";
 

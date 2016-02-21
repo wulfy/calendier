@@ -1,5 +1,5 @@
-import React                  from 'react';
-
+import React from 'react';
+import { Link, browserHistory } from 'react-router';
 
 export default class Home extends React.Component {
   
@@ -7,7 +7,8 @@ export default class Home extends React.Component {
   {
     return (
       <div id="homecontent">
-          test
+          Bienvenue sur le site Calendrier.
+          vous souhaitez vous <Link to={`/account`}>connecter</Link> ou <Link to={`/createAccount`}>créer un compte </Link>?
       </div>
     );
   }

@@ -1,4 +1,16 @@
 /***************/
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
+}
+
+#login-form button{
+  margin-left:15px;
+}
+
 #loginPopIn{
     width: 90%;
     height: 100%;
@@ -159,6 +171,10 @@ right: 0px;
   color:red;
 }
 
+.errorInput{
+  border-color: red;
+}
+
 #creneauForm{
   font-style: italic;
   color: #897048;
@@ -172,6 +188,29 @@ right: 0px;
 position:absolute;
 top:10px;
 right: 10px;
+}
+
+.waitingimg{
+  width: 40px;
+}
+
+#account-content .waitingimg{
+  width: 120px;
+}
+
+#account-content #login-container{
+    position: initial;
+    text-align: center;
+    font-size: 3em;
+}
+
+#account-content #notConnected{
+    width: 100%;
+    text-align: center;
+}
+
+#account-content button{
+  font-size: 0.5em;
 }
 
 #reserver{

@@ -8,9 +8,8 @@ import * as CalendarActions       from 'actions/CalendarActions';
 @connect(state => ({ login: state.login}))
 export default class LoginContainer extends React.Component {
 
-    
-
     componentDidUpdate =(prevProps,prevState)=>{
+        console.log("did update login");
         var {login,dispatch} = this.props;
         //display message container
         $("#login-message").show();

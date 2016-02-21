@@ -24,10 +24,12 @@ export default class CalendarContainer extends React.Component {
       this.displayLoginBox = false;
     }
     componentDidMount = ()=>{
-      console.log("didmount start");
+      console.log("didmount CalendarContainer");
       //do not use state, use data in "component will mount"
       this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:'',blockSelectedDay:false};
+      console.log("before update");
       this.updateReservations();
+      console.log("after update");
       this.offDays = [0];
       this.state.calendarObject = $('#calendar');
       var reactThis = this;

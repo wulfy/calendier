@@ -21,6 +21,7 @@ export default class LoginFormView extends React.Component {
       $("#notConnected").hide();
   }
   handleCancelClick= (e)=>{
+    e.preventDefault();
       $("#login-form").hide();
       $("#notConnected").show();
   }
@@ -34,8 +35,8 @@ export default class LoginFormView extends React.Component {
                  <form id="login-form" onSubmit={this.props.handleLogin}>
                     login : <input id="login" placeholder="Login" name="login" type="text" required/>
                     password: <input id="password" placeholder="Password" name="password" type="password" required/>   
-                    <br/> <button id="connecter" type="submit"><i className="fa fa-calendar-check-o">Connecter</i></button>
-                    <button id="cancelLogin" onClick={this.state.handleCancelClick}><i className="fa fa-times">Annuler</i></button>          
+                    <br/> <button id="connecter" type="submit" className="green"><i className="fa fa-calendar-check-o">Connecter</i></button>
+                    <button id="cancelLogin" onClick={this.state.handleCancelClick} className="red"><i className="fa fa-times">Annuler</i></button>          
                   </form>
             </div>
       		);
