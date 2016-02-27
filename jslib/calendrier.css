@@ -1,4 +1,7 @@
 /***************/
+.hide{
+  display: none !important;
+}
 .green{
   color: green;
 }
@@ -71,6 +74,21 @@
 /******************/
 
 
+/**** PARAMS ***/
+
+.dayPickers{
+  width: 100%;
+  margin-bottom: 20px;
+}
+.dayHourPicker{
+  display:inline-block;
+  width: 100%;
+}
+.selectPickers{
+  display:inline-block;
+}
+/***************/
+
 
 .success{
   color:green;
@@ -132,7 +150,14 @@
 display: none;
 }
 #duree{
-  display: none;
+  /*display: none;*/
+}
+
+#bookablePeriods{
+  width: 80%;
+}
+#message{
+  width:50%;
 }
 
 #notConnected{

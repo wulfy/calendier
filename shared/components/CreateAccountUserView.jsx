@@ -8,6 +8,8 @@ import { browserHistory, Router, Route, Link } from 'react-router';
 export default class CreateAccountUserView extends React.Component {
 
   componentWillMount = () =>{
+      var {params} = this.props;
+      var role = (params.type == "user")?"ROLE_USER":"ROLE_CLIENT";
       this.setState({error:{}});
       
     }
@@ -24,7 +26,7 @@ export default class CreateAccountUserView extends React.Component {
             email: e.target.email.value,
     				password: e.target.password.value,
     				tel: e.target.tel.value,
-    				roles: 'ROLE_USER'};
+    				roles: this.state.role};
     var logindata = {login:e.target.login.value,password:e.target.password.value};
     //var formdata = {login:e.target.login.value,password:e.target.password.value};
     dispatch(CreateAccountActions.createUser(formdata,this.autoLogin,logindata));  
