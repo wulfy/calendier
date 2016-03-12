@@ -12,7 +12,7 @@ function dateToStr(vardate) {
    return ('' + dd+'/'+mm+'/'+yyyy+' '+hh+':'+ii+':'+ss); // padding
   };
 
-export default function CalendarReducer(state = defaultState, action) {
+export default function LoginReducer(state = defaultState, action) {
   switch(action.type) {
     case 'CONNECT_USER':
       var user = action.res.data;
@@ -20,6 +20,7 @@ export default function CalendarReducer(state = defaultState, action) {
       var login = null;
       var roles = null;
       var id=null;
+      var email  = null;
       var className = "success";
       console.log("CONNECT USER");
       if(user.username)
@@ -28,8 +29,9 @@ export default function CalendarReducer(state = defaultState, action) {
         roles = user.roles;
         message="connected";
         id = user.id;
+        email = user.email;
       }
-      return {login:login, message:message, className:className, roles:roles, id:id} ;
+      return {login:login, username:login, message:message, className:className, roles:roles, email:email, id:id} ;
     case 'CONNECT_USER_FAILURE':
         var message="";
         var className = "error";
@@ -43,6 +45,14 @@ export default function CalendarReducer(state = defaultState, action) {
       var message = "error";
 
       return {login:state.login, message:message, className:className, roles:state.roles} ;
+    case 'EDIT_USER_FAILURE':
+      var className = "error";
+      var message = "error";
+
+      return {error:action.error, className:className} ;
+    case 'EDIT_USER':
+        var message = "Vos données ont bien été modifiées";
+        return {...state, message:message} ;
     case 'DISCONNECT_USER':
       var login = state.login;
       var message = "";

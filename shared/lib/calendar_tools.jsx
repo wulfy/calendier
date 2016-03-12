@@ -70,6 +70,8 @@ module.exports = {
       
       for(var i=0; i<durees.length-1; i=i+2)
       {
+          if(durees[i].length>0)
+          {
             currentStartDuree = myMoment(durees[i],"HH:mm");
             currentEndDuree = myMoment(durees[i+1],"HH:mm");
             mylog("currentstart");
@@ -81,6 +83,7 @@ module.exports = {
            total += libres.length;
            
           creneauxLibresListe.push({title:durees[i] +"-"+durees[i+1], frees:libres,start:dateStart.clone(),end:dateEnd.clone(),allDay:false});
+        }
       }
     }
 

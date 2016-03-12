@@ -8,14 +8,16 @@ import CreateAccount from 'components/CreateAccount';
 import CreateAccountUserView from 'components/CreateAccountUserView';
 import CreateAccountClientView from 'components/CreateAccountClientView';
 import EditCalendarParamsView from 'components/EditCalendarParamsView';
+import EditAccountFormView from 'components/EditAccountFormView'; 
 
 export default (
   <Route name="app" component={App} path="/">
-    <Route component={Calendrier} path="calendrier/:userId" />
-    <Route component={Account} path="account" />
+    <Route component={Calendrier} path="/calendrier/:userId" />
+    <Route component={Account} path="/account" />
+    <Route component={EditAccountFormView} path="/account/edit" />
     <Route component={CreateAccountUserView} path="/account/create/:type" />
-    <Route component={CreateAccount} path="createAccount" />
-    <Route component={EditCalendarParamsView} path="calendrier/params/edit" />
+    <Route component={CreateAccount} path="/createAccount" />
+    <Route component={EditCalendarParamsView} path="/calendrier/params/edit" />
   </Route>
 
 );

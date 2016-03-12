@@ -5,3 +5,4 @@ export { default as login} from './LoginReducer';
 export { default as calendarParams} from './calendarParamsReducer';
 export { default as bookForm} from './BookFormReducer';
 export { default as createAccount} from './CreateAccountReducer';
+export { default as details} from './DetailsEventReducer';

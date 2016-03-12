@@ -15,12 +15,12 @@ export default class Account extends React.Component {
   		if(login.roles[0] == "ROLE_USER")
   			view =<div id="user-options">
         			 	<Link to={`/calendrier/${login.id}`}><i className="fa fa-calendar"></i> Accéder à votre calendrier </Link> <br/>
-        			 	<Link to={`/calendrier/params/edit/${login.id}`}><i className="fa fa-list"></i> Paramétrer votre calendrier </Link>
+        			 	<Link to={`/calendrier/params/edit/`}><i className="fa fa-list"></i> Paramétrer votre calendrier </Link>
         			 </div>;
       	
 
      view =<div id="options">
-      				<Link to={`/params/user/${login.id}`}><i className="fa fa-child"></i>Modifier votre compte</Link>
+      				<Link to={`/account/edit`}><i className="fa fa-child"></i>Modifier votre compte</Link>
       				{view}
       			</div>;
     } else {

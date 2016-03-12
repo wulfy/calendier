@@ -21,9 +21,13 @@ export default class CalendarContainer extends React.Component {
       this.blockSelectedDay = false;
       this.offDays = [0];
       this.login = null;
+      this.loginId = null;
       this.displayLoginBox = false;
+      this.today = new myMoment(1, "HH");
+      this.currentMonth =  this.today.month();
     }
     componentDidMount = ()=>{
+      var {calendarParams} = this.props;
       console.log("didmount CalendarContainer");
       //do not use state, use data in "component will mount"
       this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:'',blockSelectedDay:false};
@@ -60,7 +64,7 @@ export default class CalendarContainer extends React.Component {
                 var currentObj = $(jsEvent.currentTarget);
                 reactThis.state.previouscolor = currentObj.css('border-color');
 
-                if(calEvent.clickable === true)
+                if(calEvent.clickable === true || this.loginId == calendarParams.idUser)
                 {
                       var offset = currentObj.offset();
                       var decalage = 150;
@@ -78,9 +82,9 @@ export default class CalendarContainer extends React.Component {
                           }
                         );
                       reactThis.blockSelectedDay = true;
-                      console.log(calEvent.start.unix());
+                      console.log(calEvent);
                       console.log("start");
-                      dispatch(BookFormActions.displayForm(calEvent.title,calEvent.start.toDate(),calEvent.end.toDate(),calEvent.id,text,this.props.login.login, this.props.calendarParams.message));
+                      dispatch(BookFormActions.displayForm(calEvent.title,calEvent.start.toDate(),calEvent.end.toDate(),calEvent.id,text,this.props.login.login, this.props.calendarParams.message, calEvent.free));
                   }
 
 
@@ -125,6 +129,8 @@ export default class CalendarContainer extends React.Component {
           console.log("update");
           var {login} = this.props;
           this.login = login.login;
+          if(login.id)
+            this.loginId = login.id;
           this.blockSelectedDay = false;
          this.updateReservations();
          this.refreshView($('#calendar').fullCalendar( 'getView' ));
@@ -159,7 +165,7 @@ export default class CalendarContainer extends React.Component {
       var today = new myMoment(1, "HH");
       this.state.currentReservations = convertDataToCalendarEvents(newevents);
 
-      var freeData = tools.getMounthFreeCrenaux(1,this.state.currentReservations,periodes,duree,today);
+      var freeData = tools.getMounthFreeCrenaux(this.currentMonth,this.state.currentReservations,periodes,duree,today);
 
       this.state.freeMonth = freeData.freeMonth;
       this.state.free = freeData.free;
@@ -190,7 +196,6 @@ export default class CalendarContainer extends React.Component {
         mylog("refreshView");
         this.blockSelectedDay = false;
         var events = new Array();
-        var today = new moment().utcOffset('+0100');
         var currentReservations = this.state.currentReservations;//calendarObject.fullCalendar( 'clientEvents',getReservationsFilter);
         mylog(currentReservations);
         switch(view.name)
@@ -198,11 +203,19 @@ export default class CalendarContainer extends React.Component {
           case "month" :
                     //calendarObject.fullCalendar('removeEvents');
                     //freeMonth = getMounthFreeCrenaux(view.intervalStart.month(),currentReservations);
+                    if(this.currentMonth != view.intervalStart.month() && this.today.month()<=view.intervalStart.month())
+                    {
+                      this.currentMonth = view.intervalStart.month();
+                      this.updateReservations();
+                    }
+                      
                     $("#res").removeClass("animate");
                     $("#res").hide();
                     console.log("month refresh");
+                    view.intervalStart.month()
                     events.push(...this.state.freeMonth,...this.state.mine);
                     this.resetCalendarEvents(events);
+                    console.log("end ref");
                     //calendarObject.fullCalendar('addEventSource',events);
                     break;
           case "agendaDay" :

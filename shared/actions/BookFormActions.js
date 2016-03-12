@@ -1,4 +1,4 @@
-export function displayForm(title,start,end,id,text,login,message)
+export function displayForm(title,start,end,id,text,login,message,free)
 {
   return {
     type: 'DISPLAY_FORM',
@@ -8,7 +8,8 @@ export function displayForm(title,start,end,id,text,login,message)
     id:id,
     text:text,
     login:login,
-    message:message
+    message:message,
+    free:free
   }
 }
 

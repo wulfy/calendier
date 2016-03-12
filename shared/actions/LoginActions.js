@@ -2,6 +2,7 @@ import request from 'axios';
 
 const BACKEND_GET_CONNECT_URL = "http://localhost/calendrier_api/web/app_dev.php/auth/user/";
 const BACKEND_GET_DISCONNECT_URL = "http://localhost/calendrier_api/web/app_dev.php/logout";
+const BACKEND_EDIT_USER = "http://localhost/calendrier_api/web/app_dev.php/edit/user";
 
 export function connectUser(data,callback)
 {
@@ -35,6 +36,17 @@ export function logoutUser(callback)
   }
 }
 
+export function updateUser(data)
+{
+  console.log("edit");
+  var config = {withCredentials:true};
+  
+  return {
+    type: 'EDIT_USER',
+    promise: request.put(BACKEND_EDIT_USER,data,config),
+    date: Date.now()
+  }
+}
 
 
 

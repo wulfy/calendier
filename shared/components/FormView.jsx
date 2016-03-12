@@ -36,10 +36,11 @@ export default class FormView extends React.Component {
       var {formData} = this.props;
 		return (
            <form id="event-form" onSubmit={this.handleBook}>
-              Titre : <input id="title" name="title" type="text" value={this.state.titleValue} onChange={this.handleTitleChange} required />
+              Titre : <input id="title" name="title" type="text" placeholder="entrez un titre" onChange={this.handleTitleChange} required />
               <br/><input id="dateStart" name="start" type="hidden" value={formData.start}/>
               <input id="dateEnd" name="end" type="hidden" value={formData.end} />
               <input id="userid" name="userid" type="hidden" value={this.props.userId}/>
+              <input id="eventid" name="eventid" type="hidden" value={formData.id}/>
               <button id="cancel" type="cancel" onClick={this.props.handleCloseForm}><i className="fa fa-calendar-times-o">Annuler</i></button>
               <button id="reserver" type="submit"><i className="fa fa-calendar-check-o">Reserver</i></button>
               <div>{this.state.message}</div>
