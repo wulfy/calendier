@@ -5,12 +5,15 @@ import * as BookFormActions       from 'actions/BookFormActions';
 import { connect }            from 'react-redux';
 import {mylog,convertDataToCalendarEvents,myMoment,isClickableDate}  from 'lib/Utils';
 import SearchContainer       from 'components/SearchContainer';
+
 var tools = require('lib/calendar_tools');
 
 @connect(state => ({ events: state.calendar, login: state.login, calendarParams: state.calendarParams}))
 export default class CalendarContainer extends React.Component {
 
     componentWillMount= () => {
+      var {calendarParams,dispatch} = this.props;
+
       this.calendarObject = '';
       this.currentReservations = '';
       this.freeMonth='';
@@ -25,6 +28,7 @@ export default class CalendarContainer extends React.Component {
       this.displayLoginBox = false;
       this.today = new myMoment(1, "HH");
       this.currentMonth =  this.today.month();
+
     }
     componentDidMount = ()=>{
       var {calendarParams} = this.props;
@@ -32,7 +36,9 @@ export default class CalendarContainer extends React.Component {
       //do not use state, use data in "component will mount"
       this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:'',blockSelectedDay:false};
       console.log("before update");
-      this.updateReservations();
+      console.log(calendarParams);
+      if(typeof calendarParams.duree != 'undefined')
+        this.updateReservations();
       console.log("after update");
       this.offDays = [0];
       this.state.calendarObject = $('#calendar');

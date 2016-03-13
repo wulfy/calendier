@@ -11,24 +11,27 @@ export default class Account extends React.Component {
   {
   	var {login,dispatch} = this.props;
   	var view = "";
-  	if (login.login) {
-  		if(login.roles[0] == "ROLE_USER")
-  			view =<div id="user-options">
-        			 	<Link to={`/calendrier/${login.id}`}><i className="fa fa-calendar"></i> Accéder à votre calendrier </Link> <br/>
-        			 	<Link to={`/calendrier/params/edit/`}><i className="fa fa-list"></i> Paramétrer votre calendrier </Link>
-        			 </div>;
-      	
+    var paramsOption = "";
+    var gotoCalendarOption = "";
 
-     view =<div id="options">
-      				<Link to={`/account/edit`}><i className="fa fa-child"></i>Modifier votre compte</Link>
-      				{view}
-      			</div>;
+  	if (login.login) {
+
+      if (login.roles[0] == "ROLE_USER"){
+        paramsOption = <li><Link to={`/calendrier/params/edit/`}><i className="fa fa-list"></i> Paramétrer votre calendrier </Link></li>;
+        gotoCalendarOption = <li><Link to={`/calendrier/${login.id}`}><i className="fa fa-calendar"></i> Accéder à votre calendrier </Link> </li>;
+      }
+     view =<ul id="options">
+              {paramsOption}
+              {gotoCalendarOption}
+              <li ><Link to={`/account/edit`}><i className="fa fa-child"></i>Modifier votre compte</Link></li>
+      			</ul>;
     } else {
-      view = "non connecté";
+      view = <div> <span>"non connecté"</span>
+                  
+            </div>;
     }
     return (
       <div id="account-content">
-          <LoginContainer params={this.props.params}/>
           {view}
       </div>
     );

@@ -1,15 +1,17 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
-
+import * as CalendarParamsActions       from 'actions/CalendarParamsActions';
 
 @connect(state => ({ calendarParams: state.calendarParams}))
 export default class CalendarParamsContainer extends React.Component {
 
-    componentDidMount = () =>{
-    	//var { events, dispatch} = this.props;
+    componentWillMount = () =>{
+    	var { calendarParams, dispatch} = this.props;
       //updateParams(this.props.calendarParams);
       console.log("didmount params");
+      if(typeof calendarParams.duree != undefined)
+              dispatch(CalendarParamsActions.getParams(this.props.params));
 
   	}
 	render()
