@@ -3,6 +3,7 @@ import { connect }            from 'react-redux';
 import * as CreateAccountActions from 'actions/CreateAccountActions';
 import * as LoginActions       from 'actions/LoginActions';
 import { browserHistory, Router, Route, Link } from 'react-router';
+import RequestDisplay from 'components/RequestDisplay';
 
 @connect(state => ({ createAccount: state.createAccount, login: state.login}))
 export default class CreateAccountUserView extends React.Component {
@@ -11,7 +12,6 @@ export default class CreateAccountUserView extends React.Component {
       var {params} = this.props;
       var role = (params.type == "user")?"ROLE_USER":"ROLE_CLIENT";
       this.setState({error:{}});
-      
     }
 
   handleCreateAccount = (e) => {
@@ -19,6 +19,7 @@ export default class CreateAccountUserView extends React.Component {
   	e.preventDefault();
     console.log("handlecreate");
     console.log(e.target.value);
+
     var formdata = {
     				nom: e.target.nom.value,
     				prenom: e.target.prenom.value,
@@ -26,7 +27,7 @@ export default class CreateAccountUserView extends React.Component {
             email: e.target.email.value,
     				password: e.target.password.value,
     				tel: e.target.tel.value,
-    				roles: this.state.role};
+    				role: this.props.params.type};
     var logindata = {login:e.target.login.value,password:e.target.password.value};
     //var formdata = {login:e.target.login.value,password:e.target.password.value};
     dispatch(CreateAccountActions.createUser(formdata,this.autoLogin,logindata));  
@@ -57,32 +58,53 @@ export default class CreateAccountUserView extends React.Component {
       }
     else if(login.id)
     {
-      window.location.href = "/calendar/edit/";
+      window.location.href = "/account";
     }
   }
 
   render() 
   {
-  	var {createAccount} = this.props;
+  	var {createAccount,role} = this.props;
     var message = this.state.error;
 
     return (
       <div id="createUserAccount-content">
+
           <form id="createUserAccount-form" onSubmit={this.handleCreateAccount}> 
-                    Nom : <input id="nom" placeholder="Nom" name="nom" type="text" required />  
+                  <div className="form-group">
+                    <label for="nom"> Nom </label>
+                    <input id="nom" className="form-control" placeholder="Nom" name="nom" type="text" required />  
                     <div className="error">{message.nom}</div>
-                    Prenom : <input id="prenom" placeholder="Prenom" name="prenom" type="text" required />  
+                  </div>
+                  <div className="form-group">
+                    <label for="prenom"> Prenom </label>
+                    <input id="prenom" className="form-control" placeholder="Prenom" name="prenom" type="text" required />  
                     <div className="error">{message.prenom}</div>
-                    Identifiant : <input id="username" placeholder="Identifiant" name="login" type="text" required/>
+                  </div>
+                  <div className="form-group">
+                    <label for="username"> Identifiant </label>
+                    <input id="username" className="form-control" placeholder="Identifiant" name="login" type="text" required/>
                     <div className="error">{message.username}</div>
-                    Mot de passe: <input id="password" placeholder="Mot de passe" name="password" type="password" required/>
+                  </div>
+                  <div className="form-group">
+                    <label for="password"> Mot de passe </label>
+                    <input id="password" className="form-control" placeholder="Mot de passe" name="password" type="password" required/>
                     <div className="error">{message.password}</div>
-                    Email: <input id="email" placeholder="Email" name="email" type="email" required/>
+                  </div>
+                  <div className="form-group">
+                    <label for="email"> Email </label>
+                    <input id="email" className="form-control" placeholder="Email" name="email" type="email" required/>
                     <div className="error">{message.email}</div>
-                    Tel : <input id="tel" placeholder="Prenom" name="tel" type="text" /> 
-                    <br/> <button id="createaccount" type="submit" className="green"><i className="fa fa-calendar-check-o">Créer le compte</i></button>
-                    <button id="cancel" onClick={this.handleCancelClick} className="red"><i className="fa fa-times">Annuler</i></button>          
+                  </div>
+                  <div className="form-group">
+                    <label for="tel"> Tel </label>
+                    <input id="tel" className="form-control" placeholder="Prenom" name="tel" type="text" /> 
+                  </div>
+
+                    <button id="cancel" onClick={this.handleCancelClick} className="btn btn-lg btn-default"><i className="fa fa-times">Annuler</i></button>          
+                    <button id="createaccount" type="submit" className="btn btn-lg btn-success"><i className="fa fa-calendar-check-o">Créer le compte</i></button>
            </form>
+           <RequestDisplay requestId="CREATE_ACCOUNT"/>
       </div>
     );
   }

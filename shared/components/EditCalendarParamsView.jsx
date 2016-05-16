@@ -43,6 +43,7 @@ export default class EditCalendarParamsView extends React.Component {
        var partIdTo2 = "D"+dayNumber+"_PM_3";
       var partId = "D"+dayNumber+"_AM";
        var partId2 = "D"+dayNumber+"_PM";
+       
 
         var from_H = 0;
         var from_M = 0;
@@ -82,7 +83,7 @@ export default class EditCalendarParamsView extends React.Component {
         $("#"+partIdTo+"_min").val(to_M);
         (displayH)?$("#"+partId).show():$("#"+partId).hide();
         $("#"+"off_"+dayNumber+"_AM").prop('checked', displayH);
-        this.updateOffDays("off_"+dayNumber+"_AM");
+        this.updateOffDays("off_"+dayNumber+"_AM",dayNumber);
         
         $("#"+partIdFrom2).val(from_H2);
         $("#"+partIdTo2).val(to_H2);
@@ -90,7 +91,7 @@ export default class EditCalendarParamsView extends React.Component {
         $("#"+partIdTo2+"_min").val(to_M2);
         (displayH2)?$("#"+partId2).show():$("#"+partId2).hide();
         $("#"+"off_"+dayNumber+"_PM").prop('checked', displayH2);
-        this.updateOffDays("off_"+dayNumber+"_PM");
+        this.updateOffDays("off_"+dayNumber+"_PM",dayNumber);
 
       }.bind(this));
   }
@@ -183,17 +184,26 @@ export default class EditCalendarParamsView extends React.Component {
       this.setState({toStartHour: newtoStartHour,bookablePeriods:newbookablePeriods});
 
     }
-    updateOffDays = (elementId) => {
+    updateOffDays = (elementId,dayNumber) => {
       var nameArray = elementId.split("_");
       var offAM = nameArray[0]+"_"+nameArray[1]+"_AM";
       var offPM = nameArray[0]+"_"+nameArray[1]+"_PM";
       var dayOffWarn = $("#"+this.dayOffBase+nameArray[1]);
+      var displayH2 = $("#"+offAM).prop('checked');
+      var displayH = $("#"+offPM).prop('checked');
+      var dayId = "day"+dayNumber;
+
       (!$("#"+offAM).prop('checked') && !$("#"+offPM).prop('checked'))?dayOffWarn.show():dayOffWarn.hide();
+
+      //MAJ style du tableau
+        if((displayH2 && !displayH) || (!displayH2 && displayH))document.getElementById(dayId).className = "panel panel-warning";
+        if(!displayH2 && !displayH)document.getElementById(dayId).className = "panel panel-danger";
+        if(displayH2 && displayH)document.getElementById(dayId).className = "panel panel-success";
     }
-    toggleElement = (id,elementId) => {
+    toggleElement = (id,elementId,dayNumber) => {
         $("#"+id).toggle();
 
-        this.updateOffDays(elementId);
+        this.updateOffDays(elementId,dayNumber);
     }
   buildDayhourPicker = (dayNumber,form,partOfTheDayObj, min, max) =>{
     var partOfTheDay = partOfTheDayObj.value *2;
@@ -211,7 +221,7 @@ export default class EditCalendarParamsView extends React.Component {
 
     var checkboxOff = "off_"+dayNumber+"_"+  partOfTheDayObj.name;   
 
-    var creneauOffCheckBox = <input type="checkbox" id={checkboxOff} name={checkboxOff} onClick={this.toggleElement.bind(this,partId,checkboxOff)} /> 
+    var creneauOffCheckBox = <input type="checkbox" id={checkboxOff} name={checkboxOff} onClick={this.toggleElement.bind(this,partId,checkboxOff,dayNumber)} /> 
    
     return <div id={dayHourPickerId}> {creneauOffCheckBox} {partOfTheDayObj.name} <div id={partId} className="dayHourPicker" >  {selectFrom} -> {selectTo} </div> </div>
   }
@@ -235,22 +245,36 @@ export default class EditCalendarParamsView extends React.Component {
         var pickersDayId = this.pickersDayBase+dayNumber;
         var dayoffId = this.dayOffBase+dayNumber;
 
-        return <div id={id} className="dayPickers"> {dayName} <div id={dayoffId} className="red" style={hiddenStyle}> Non travaillé </div><div id={pickersDayId}> {this.buildDayhourPicker(dayNumber,"editCalendarParams-form",AM,0,12)} {this.buildDayhourPicker(dayNumber,"editCalendarParams-form",PM,13,24)}<br/></div></div>
+        return (<div  className="col-sm-3"> 
+                  <div id={id} className="panel panel-default">
+                    <div className="panel-heading">
+                      <h3 className="panel-title">{dayName} </h3>
+                      <div id={dayoffId} className="label label-danger" style={hiddenStyle}> Non travaillé </div>
+                    </div> 
+                    <div id={pickersDayId} className="panel-body"> {this.buildDayhourPicker(dayNumber,"editCalendarParams-form",AM,0,12)} {this.buildDayhourPicker(dayNumber,"editCalendarParams-form",PM,13,24)}
+                      <br/>
+                    </div>
+                  </div>
+                </div>);
     }.bind(this))
     //this.state.toStartHour[dayNumber]
     return (
       <div id="editCalendarParams-content">
-          <form id="editCalendarParams-form" onSubmit={this.handleEdit}> 
+        
+          <form id="editCalendarParams-form" className="normalForm" onSubmit={this.handleEdit}> 
+              <div className="row">
                     Crenaux : <input id="bookablePeriods" placeholder="Créneaux" name="bookablePeriods" type="hidden" value={bookablePeriodsString} />  
                     <div className="error">{message.bookable_periods}</div>
                     {daysPickers}
+              </div>
                     Duree : <input id="duree" placeholder="duree" name="duree" type="text" value={this.state.data.duree} onChange={this.handleChangeInput} required />  
                     <div className="error">{message.duree}</div>
                     Message : <input id="message" placeholder="message" name="message" type="text" onChange={this.handleChangeInput} value={this.state.data.message} />
                     <div className="error">{message.username}</div>
-                    <br/> <button id="editparams" type="submit" className="green"><i className="fa fa-calendar-check-o">Valider</i></button>
-                    <button id="cancel" onClick={this.handleCancelClick} className="red"><i className="fa fa-times">Annuler</i></button>          
+                    <br/> <button id="editparams" type="submit" className="btn btn-lg btn-success"><i className="fa fa-calendar-check-o">Valider</i></button>
+                    <button id="cancel" onClick={this.handleCancelClick} type="button" className="btn btn-lg btn-default"><i className="fa fa-times">Annuler</i></button>          
            </form>
+        
       </div>
     );
   }

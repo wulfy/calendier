@@ -1,6 +1,7 @@
 import React from 'react';
 import Home from 'components/Home';
 import LoginContainer       from 'components/LoginContainer';
+import { Link, browserHistory } from 'react-router';
 
 export default class AppView extends React.Component {
   render() {
@@ -11,9 +12,11 @@ export default class AppView extends React.Component {
 
     return (
       <div id="app-view">
-        <h1><Link to={`/`}>Calendrier</Link></h1>
+        <nav>
+          <h1><Link to={`/`}> <i className="fa fa-calendar rotate"></i> Calendrier</Link></h1>
+        </nav>
         {headerLogin}
-        <hr />
+      
         {this.props.children || <Home />}
       </div>
     );

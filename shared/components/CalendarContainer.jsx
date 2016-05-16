@@ -251,10 +251,15 @@ export default class CalendarContainer extends React.Component {
 	render()
 	{
 		  console.log("STATE RENDERING CALENDAR CONTAINER : ");
-    	var { events, dispatch, login} = this.props;
+    	var { events, dispatch, calendarParams, login} = this.props;
       var loginpopinClass = (login.login || !this.displayLoginBox)?"hide":"show";
 		return (
 			<div id="calendar-container">
+          <div className="panel panel-default">
+            <div className="panel-body">
+              <p className="text-center"><i className="fa fa-bullhorn"></i> {calendarParams.message}</p>
+            </div>
+          </div>
             <SearchContainer getFree={this.getFreeHandler} getCalendarObj={this.getCalendarObjHandler}/>
 	      		<div id="calendar">
 	      		</div>

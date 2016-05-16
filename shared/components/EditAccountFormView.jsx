@@ -117,13 +117,14 @@ export default class EditAccountFormView extends React.Component {
 
 		return (
             <div id="edit-form-view">
-                 <form id="edit-login-form" onSubmit={this.handleEditAccount}>
+                 <form id="edit-login-form" className="normalForm" onSubmit={this.handleEditAccount}>
                     login : <input id="username" placeholder="username" name="username" type="text" value={this.state.data.username} onChange={this.handleChangeInput} required/>
                     email : <input id="email" placeholder="email" name="email" type="email" value={this.state.data.email} onChange={this.handleChangeInput} required/>
                     password: <input id="password" placeholder="password" name="password" type="password" onChange={this.handleChangeInput}/> 
                     confirm password: <input id="confirmpassword" placeholder="confirmpassword" name="confirmpassword" type="password" />   
-                    <br/> <button id="connecter" type="submit" className="green"><i className="fa fa-calendar-check-o">Modifier vos données</i></button>
-                    <button id="cancelLogin" onClick={this.handleCancelClick} className="red"><i className="fa fa-times">Annuler</i></button>          
+                    <br/> 
+                    <button id="cancelLogin" onClick={this.handleCancelClick} className="btn btn-lg btn-default"><i className="fa fa-times">Annuler</i></button>     
+                    <button id="connecter" type="submit" className="btn btn-lg btn-success"><i className="fa fa-calendar-check-o">Modifier vos données</i></button>     
                   </form>
                   <div id="message"></div>
             </div>

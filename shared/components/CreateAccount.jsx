@@ -7,11 +7,33 @@ export default class CreateAccount extends React.Component {
   	
     return (
       <div id="createaccount-content">
-          <div>
-               <Link to={`/account/create/user`}> <i className="fa fa-calendar"></i> Je souhaite un compte pour créer un calendrier </Link>
+          <div className="container">
+            <div className="row">
+              <div className = "jumbotron alert-danger dashed-top margin-bottom-none">
+                  <Link to={`/account/create/user`}> 
+                    <div className="col-xs-4 ficon-10x text-center">
+                      <i className="fa fa-calendar"></i>
+                    </div>
+                    <div className="col-xs-7">
+                           <h2> Creer votre calendrier </h2> Créez votre calendrier avec <b>vos horaires</b> d'ouverture et un message de bienvenue ! 
+                    </div>
+                  </Link>
+              </div>
+            </div>
           </div>
-          <div>
-               <Link to={`/calendrier/create/client`}> <i className="fa fa-user"></i> Je souhaite un compte pour faire une réservation </Link>
+          <div className="container">
+            <div className="row">
+              <div className="jumbotron alert-info dashed-top margin-bottom-none">
+                  <Link to={`/account/create/client`}>
+                    <div className="col-xs-7 text-right">
+                         <h2> Faite une réservation </h2> Trouvez facilement un créneau au jour de votre choix et réservez en 1 clic  
+                    </div>
+                    <div className="col-xs-4 ficon-10x text-center">
+                      <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </div>
+                  </Link>
+              </div>
+            </div>
           </div>
       </div>
     );

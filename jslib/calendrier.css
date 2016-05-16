@@ -11,7 +11,7 @@
 }
 
 #login-form button{
-  margin-left:15px;
+  font-size: 2rem;
 }
 
 #loginPopIn{
@@ -134,7 +134,7 @@
 }
 
 #notConnected {
-    position: absolute;
+    position: relative;
     right: 0px;
     -webkit-animation: slide 0.5s forwards;
     -webkit-animation-delay: 2s;
@@ -142,6 +142,9 @@
     animation-delay: 2s;
 }
 
+#homecontent{
+
+}
 
 #dispoDay{
   display: none;
@@ -182,6 +185,7 @@ right: 0px;
 
 #login-form{
   display: none;
+  text-align: center;
 }
 
 .search_result{
@@ -207,6 +211,8 @@ right: 0px;
 
 #disconnect{
   color:red;
+  background: none;
+  border:none;
 }
 
 #login-container{
@@ -239,18 +245,20 @@ right: 10px;
 }
 
 #reserver{
-  color:green;
   font-size: 20px;
   font-weight: bold;
   float: right;
 }
 #cancel{
   color:red;
-  font-size: 15px;
   font-weight: bold;
   float: left;
 }
 
+button{
+  font-size:0.8em !important;
+  margin-right: 10px !important;
+}
 #content{
 	width: 90%;
 	margin-left: auto;
@@ -269,8 +277,11 @@ right: 10px;
 }
 
 #event-form{
-    width: 300px;
     margin-top:20px;
+}
+
+#title{
+  margin-bottom: 20px;
 }
 
 #form-container{
@@ -303,7 +314,9 @@ right: 10px;
     padding: 0;
     position: absolute;
     top: 5px;
-    left: 25%;
+    /*left: 25%;*/
+    font-weight: bold;
+    padding-left: 20px;
 }
 
 #options{
@@ -326,6 +339,8 @@ right: 10px;
   width: 30%;
   height: 200px;
   vertical-align: middle;
+
+
 }
 
 #options li a{
@@ -338,8 +353,40 @@ right: 10px;
     color:black;
   }
 
-#options li a:hover{
-    font-size: 2em;
+  @-webkit-keyframes bigger {
+     0% {
+        font-size: 1em;
+    }
+    100% {
+         font-size: 1.2em;
+    }
+}
+@-moz-keyframes bigger {
+     0% {
+        font-size: 1em;
+    }
+    100% {
+         font-size: 1.2em;
+    }
+}
+@-o-keyframes bigger {
+    0% {
+        font-size: 1em;
+    }
+    100% {
+         font-size: 1.2em;
+    }
+}
+
+#options li:hover{
+    font-size: 1.2em;
+
+    -webkit-animation: bigger 0.5s linear;
+    -webkit-animation-iteration-count: 1;
+    -moz-animation: bigger 0.5s linear;
+    -moz-animation-iteration-count: 1;
+    -o-animation: bigger 0.5s linear;
+    -o-animation-iteration-count: 1;
   }
 
 #options li a:hover .fa{
@@ -363,4 +410,242 @@ right: 10px;
 
 h1 a{
   text-decoration: none;
+}
+
+.normalForm{
+  width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .panel-title{
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .row .label{
+        display: inline-block;
+    margin-left: 20px;
+    top: 0px;
+    right: 15px;
+  }
+
+  .row .panel{
+    height: 193px;
+  }
+
+  .row .jumbotron{
+    height: 200px;
+    color: black;
+  }
+
+  .row .jumbotron a{
+    color: black;
+  }
+
+  .row .jumbotron a:hover{
+     text-shadow:#FFF 3px 5px 2px;
+  }
+
+  .ficon-10x .fa{
+    font-size: 10rem;
+  }
+
+  #createUserAccount-content{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rotate {
+
+/* Safari */
+-webkit-transform: rotate(-45deg);
+
+/* Firefox */
+-moz-transform: rotate(-45deg);
+
+/* IE */
+-ms-transform: rotate(-45deg);
+
+/* Opera */
+-o-transform: rotate(-45deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+
+
+/***** ANIM ****/
+body{
+     
+
+    }
+    .button-line { height: 300px; background: url(http://lesnoces.de/img/header/jar-line.png) repeat-y 28px; }
+    .mybutton {width: 56px;}
+    .button-jar {
+        height: 144px;
+        display: block;
+        background: url(http://lesnoces.de/img/header/jar.png) no-repeat;
+        color: #777;
+        text-decoration: none;
+        opacity: .5;
+        transition: opacity .5s ease;
+        -webkit-transition: opacity .5s ease;
+        -moz-transition: opacity .5s ease;
+        -ms-transition: opacity .5s ease;
+        -o-transition: opacity .5s ease;
+    }
+    .button-jar img {
+        display: block;
+        padding-top: 75px;
+    }
+
+    .mybutton {
+    left: 0px;
+    animation: swinging-us 3.5s infinite ease-in-out;
+    -webkit-animation: swinging-us 3.5s infinite ease-in-out;
+    -moz-animation: swinging-us 3.5s infinite ease-in-out;
+    -ms-animation: swinging-us 3.5s infinite ease-in-out;
+    -o-animation: swinging-us 3.5s infinite ease-in-out;
+}
+
+#bg1 { background-image: url(/calendarbg.jpg);}
+#bg2 { 
+  background-image: url(http://vickiarcher.com/wp-content/uploads/2015/09/digital-self-new-york-secretary-hulton-archive-vicki-archer-2.jpg); 
+}
+
+.section-bg{
+  width: 100%;
+  height: 120vh;
+  z-index: -1;
+  background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
+
+
+
+            @-webkit-keyframes swinging-us {
+    0% { -webkit-transform: rotate(-0.5deg); }
+    50% { -webkit-transform: rotate(0.5deg); }
+    100% { -webkit-transform: rotate(-0.5deg); }
+}
+            @-moz-keyframes swinging-us {
+    0% { -moz-transform: rotate(-0.5deg); }
+    50% { -moz-transform: rotate(0.5deg); }
+    100% { -moz-transform: rotate(-0.5deg); }
+}
+            @-ms-keyframes swinging-us {
+    0% { -ms-transform: rotate(-0.5deg); }
+    50% { -ms-transform: rotate(0.5deg); }
+    100% { -ms-transform: rotate(-0.5deg); }
+}
+            @-o-keyframes swinging-us {
+    0% { -o-transform: rotate(-0.5deg); }
+    50% { -o-transform: rotate(0.5deg); }
+    100% { -o-transform: rotate(-0.5deg); }
+}
+.animated, fa .animated{
+  position: fixed;
+  top:40%;
+  display: none;
+}
+
+#test{
+  background-color: red;
+  height: 100px;
+  width: 100px;
+}
+.text{
+  width: 40%;
+  color: black;
+}
+#clock {
+  font-size: 5rem;
+  color: red;
+}
+html{
+  height: 2000px;
+}
+#clock{
+  z-index: 1;
+}
+#agenda{
+  z-index: 2;
+}
+#calendar_icon {
+  font-size: 10rem;
+  left: -100px;
+  
+}
+
+#bg2
+{
+ 
+}
+
+
+.textbg{
+  /*background-color: rgba(255,255,255,0.4);*/
+  z-index:-1;
+  width: 100%;
+  height: 100%;
+  position : absolute;
+  border: 2px solid white;
+    border-radius: 25px;
+    left: 0px;
+    -webkit-filter: blur(5px); /* Chrome, Safari, Opera */
+    filter: blur(50px);
+    background-color: rgba(255, 255, 255,0.5);
+ /* background-color: rgba(255, 255, 255);
+  box-shadow: 8px 8px 12px #aaa;*/
+}
+
+nav{
+      position: absolute;
+    left: 10px;
+    top: 0px;
+    z-index: 5;
+}
+.connect{
+  border-color: #337ab7 !important;
+  margin-right: 10px;
+}
+#connectbuttons a{
+  float: right;
+}
+#connectbuttons{
+  z-index: 1;
+  position: absolute;
+  padding-top: 20px;
+    right: 0px;
+    top: 0px;
+    width: 100%;
+    height: 80px;
+    background-color: rgba(255,255,255,0.5);
+
+}
+
+.connect:hover{
+  color:white !important;
+  background-color: #337ab7;
+  }
+
+#react-view{
+  margin-top: 80px;
+}
+
+#account-content{
+
+}
+
+.ficon-5x{
+
+  font-size: 5rem;
+}
+
+.container{
+  width: 100%;
 }

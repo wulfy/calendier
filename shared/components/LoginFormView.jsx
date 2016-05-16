@@ -35,8 +35,9 @@ export default class LoginFormView extends React.Component {
                  <form id="login-form" onSubmit={this.props.handleLogin}>
                     login : <input id="login" placeholder="Login" name="login" type="text" required/>
                     password: <input id="password" placeholder="Password" name="password" type="password" required/>   
-                    <br/> <button id="connecter" type="submit" className="green"><i className="fa fa-calendar-check-o">Connecter</i></button>
-                    <button id="cancelLogin" onClick={this.state.handleCancelClick} className="red"><i className="fa fa-times">Annuler</i></button>          
+                    <br/> 
+                    <button id="cancelLogin" type="button" onClick={this.handleCancelClick} className="btn btn-xs btn-default"><i className="fa fa-times">Annuler</i></button>          
+                    <button id="connecter" type="submit" className="btn btn-xs btn-success"><i className="fa fa-calendar-check-o">Connecter</i></button>
                   </form>
             </div>
       		);

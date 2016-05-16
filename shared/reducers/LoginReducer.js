@@ -1,4 +1,4 @@
-const defaultState = {};
+const defaultState = {className:null};
 var moment = require('moment');
 
 function dateToStr(vardate) {
@@ -21,7 +21,7 @@ export default function LoginReducer(state = defaultState, action) {
       var roles = null;
       var id=null;
       var email  = null;
-      var className = "success";
+      var className = "label label-success";
       console.log("CONNECT USER");
       if(user.username)
       {
@@ -34,19 +34,22 @@ export default function LoginReducer(state = defaultState, action) {
       return {login:login, username:login, message:message, className:className, roles:roles, email:email, id:id} ;
     case 'CONNECT_USER_FAILURE':
         var message="";
-        var className = "error";
+        var className = "";
         console.log("connect failure");
         console.log(action.error.config.headers.login);
         if(typeof(action.error.config.headers.login) != 'undefined')
+        {
           message="Username or password invalid";
+          className = "label label-danger";
+        }
       return {login:state.login, message:message, className:className} ;
     case 'DISCONNECT_USER_FAILURE':
-      var className = "error";
+      var className = "label label-danger";
       var message = "error";
 
       return {login:state.login, message:message, className:className, roles:state.roles} ;
     case 'EDIT_USER_FAILURE':
-      var className = "error";
+      var className = "label label-danger";
       var message = "error";
 
       return {error:action.error, className:className} ;
@@ -56,14 +59,14 @@ export default function LoginReducer(state = defaultState, action) {
     case 'DISCONNECT_USER':
       var login = state.login;
       var message = "";
-      var className = "info";
+      var className = "label label-warning";
       if(action.res.status == 200)
       {
         login = null;
         message = "disconnected";
       }
 
-      return {login:login, message:message, className:null, roles:null} ;
+      return {login:login, message:message, className:className, roles:null} ;
     default:
       return state;
   }

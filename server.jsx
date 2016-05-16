@@ -1,7 +1,7 @@
 import express                   from 'express';
 import React                     from 'react';
 import { renderToString }        from 'react-dom/server'
-import { RoutingContext, match } from 'react-router';
+import { RouterContext, match } from 'react-router';
 import createLocation            from 'history/lib/createLocation';
 import routes                    from 'routes';
 import { createStore, combineReducers } from 'redux';
@@ -40,7 +40,7 @@ app.use((req, res) => {
             const InitialComponent = (
               //provider permet de fournir le store au composant 
               <Provider store={store}> 
-                  <RoutingContext {...renderProps} />
+                  <RouterContext {...renderProps} />
                 </Provider>
             );
             //this.props.createThunkFlickr();
@@ -55,6 +55,8 @@ app.use((req, res) => {
                 <title>Calendar</title>
                   <link rel='stylesheet' href='/components/fullcalendar/dist/fullcalendar.css' />
                   <link rel='stylesheet' href='/calendrier.css' />
+                  <link rel='stylesheet' href='/components/bootstrap/dist/css/bootstrap.min.css' />
+                  <link rel='stylesheet' href='/components/bootstrap/dist/css/bootstrap-theme.min.css' />
                   <link rel="stylesheet" href="https://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css"/>
                   <script type="application/javascript">
                     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};
@@ -64,15 +66,22 @@ app.use((req, res) => {
                       $( domid ).fadeOut( "slow");
                     }
                   </script>
+
                   
               </head>
               <body>
                 <div id="react-view">${componentHTML}</div>
+
+                
+
+
+                
                 <script src='/components/jquery/dist/jquery.min.js'></script>
                   <script src='/components/moment/min/moment.min.js'></script>
                   <script src='/components/fullcalendar/dist/fullcalendar.min.js'></script>
                   <script src='/components/fullcalendar/dist/lang-all.js'></script>
                 <script type="application/javascript" src="/bundle.js"></script>
+
               </body>
           </html>    
         `

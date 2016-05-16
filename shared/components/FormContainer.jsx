@@ -14,13 +14,24 @@ export default class FormContainer extends React.Component {
          e.preventDefault();
         var {message,formData, dispatch} = this.props;
         dispatch(BookFormActions.hideForm());
+        
+    }
+    
+    componentDidUpdate = (prevProps,prevState) =>{
+      var {formData} = this.props;
+
+       var displayCommand = (formData.display?"show":"hide");
+      $('#book-modal').modal(displayCommand);
     }
 	render()
 	{
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
         console.log("RENDER Form container");
       var {message,formData, dispatch} = this.props;
-      var displayClass = (formData.display?"show":"hide");
+      /*var displayClass = (formData.display?"show":"hide");
+      displayClass += " modal fade";*/
+     
+
       var view = "";
       var msg = (message.error?message.error + " " : "") + this.props.message.data;
       console.log(formData);
@@ -40,12 +51,23 @@ export default class FormContainer extends React.Component {
         view = <div id="loginPopIn"> Vous devez vous logger</div>
        }
 		return (
-            <div id="form-container" className={displayClass}>
-                <div id="close-form" onClick={this.handleCloseForm}>X</div>
-                <h3> Réserver </h3>
-                
-                <span id="creneauForm">{formData.text}</span>
-                    {view}
+            <div id="book-modal" className="modal fade in" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                <div className="modal-dialog modal-sm" role="document">
+                  <div className="modal-content">
+
+                    <div className="modal-header" >
+                        <div id="close-form" onClick={this.handleCloseForm}>X</div>
+                        <h4 className="modal-title" id="myModalLabel"> Réserver </h4>
+                    </div>    
+                    <div className="modal-body" >
+                        <span id="creneauForm">{formData.text}</span>
+                            {view}
+
+                    </div>
+                    
+                  </div>
+
+                </div>
             </div>
       		);
 	}
