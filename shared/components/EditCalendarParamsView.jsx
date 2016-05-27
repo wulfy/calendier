@@ -2,6 +2,7 @@ import React from 'react';
 import { connect }            from 'react-redux';
 import * as CalendarParamsActions       from 'actions/CalendarParamsActions';
 import {mylog,myMoment}  from 'lib/Utils';
+import RequestDisplay from 'components/RequestDisplay';
 
 @connect(state => ({ calendarParams: state.calendarParams}))
 export default class EditCalendarParamsView extends React.Component {
@@ -273,6 +274,9 @@ export default class EditCalendarParamsView extends React.Component {
                     <div className="error">{message.username}</div>
                     <br/> <button id="editparams" type="submit" className="btn btn-lg btn-success"><i className="fa fa-calendar-check-o">Valider</i></button>
                     <button id="cancel" onClick={this.handleCancelClick} type="button" className="btn btn-lg btn-default"><i className="fa fa-times">Annuler</i></button>          
+           
+           <RequestDisplay requestId="PUT_PARAMS"/>
+
            </form>
         
       </div>

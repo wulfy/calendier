@@ -10,18 +10,24 @@ import * as DetailEventActions       from 'actions/DetailEventActions';
 @connect(state => ({ message: state.messages, formData: state.bookForm}))
 export default class FormContainer extends React.Component {
 
-    handleCloseForm = (e) =>{
-         e.preventDefault();
+    handleCloseForm = () =>{
+         //e.preventDefault();
+         console.log("hide form");
         var {message,formData, dispatch} = this.props;
+        console.log("hide form");
         dispatch(BookFormActions.hideForm());
         
     }
     
     componentDidUpdate = (prevProps,prevState) =>{
-      var {formData} = this.props;
+      //var {target} = this.props;
 
-       var displayCommand = (formData.display?"show":"hide");
-      $('#book-modal').modal(displayCommand);
+       //var display = (formData.display?"show":"hide");
+       
+      /*if(formData.display)
+        target.className += " greyscale";
+      else
+        target.className.replace(" greyscale",'');*/
     }
 	render()
 	{
@@ -30,8 +36,8 @@ export default class FormContainer extends React.Component {
       var {message,formData, dispatch} = this.props;
       /*var displayClass = (formData.display?"show":"hide");
       displayClass += " modal fade";*/
-     
-
+     var displayClass = {display:formData.display?"block":"none"};
+     var stylegrey = {position:"absolute", width:"100%", height:"100%", "background-color":"grey",opacity:"0.6"};
       var view = "";
       var msg = (message.error?message.error + " " : "") + this.props.message.data;
       console.log(formData);
@@ -51,7 +57,8 @@ export default class FormContainer extends React.Component {
         view = <div id="loginPopIn"> Vous devez vous logger</div>
        }
 		return (
-            <div id="book-modal" className="modal fade in" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+            <div id="book-modal" style={displayClass} className="modal fade in" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                <div id="greybackground" style={stylegrey} onClick={this.handleCloseForm} ></div>
                 <div className="modal-dialog modal-sm" role="document">
                   <div className="modal-content">
 

@@ -1,6 +1,6 @@
 {
   "name": "calendier",
-  "description": "",
+  "description": ".bowerrc contient le directory de destination",
   "main": "",
   "moduleType": [],
   "authors": [
@@ -18,6 +18,9 @@
   ],
   "dependencies": {
     "fullcalendar": "~2.6.0",
-    "bootstrap" : ">3.3.6"
+    "bootstrap" : ">3.3.6",
+    "jquery-modal" : ">0.3.0",
+    "jquery": ">=1.7.1",
+    "moment": ">=2.5.0"
   }
 }

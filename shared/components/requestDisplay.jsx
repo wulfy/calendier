@@ -7,6 +7,11 @@ export default class RequestDisplay extends React.Component {
   componentWillMount = () => {
     
   }
+
+  resetMessage = () => {
+    
+  }
+
 	render()
 	{
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
@@ -22,10 +27,20 @@ export default class RequestDisplay extends React.Component {
      
         if(requestDisplay.status == "request")
           message = <img className="waitingimg" src="http://i.stack.imgur.com/MnyxU.gif"/>;
-        else if(typeof requestDisplay.message.message === "string")
-          message = "error : " + requestDisplay.message.message;
-        else
-          message = "error : server return an unexpected error" ;
+        else{
+
+          if(requestDisplay.status == "error")
+            message = "Error : ";
+          else
+            message = '';
+
+          if(typeof requestDisplay.message.message === "string")
+            message += requestDisplay.message.message;
+          else
+            message += "server return an unexpected message" ;
+
+          setTimeout(function(){document.getElementById("requestDisplayView").className = "hide";},5000);
+        } 
       }
 
 

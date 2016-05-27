@@ -42,7 +42,7 @@ export default class FormView extends React.Component {
               <input id="userid" name="userid" type="hidden" value={this.props.userId}/>
               <input id="eventid" name="eventid" type="hidden" value={formData.id}/>
               <div className="modal-footer">
-                <button id="cancel" type="cancel" className="btn btn-lg btn-default" onClick={this.props.handleCloseForm}><i className="fa fa-calendar-times-o">Annuler</i></button>
+                <button id="cancel" type="button" className="btn btn-lg btn-default" onClick={this.props.handleCloseForm}><i className="fa fa-calendar-times-o">Annuler</i></button>
                 <button id="reserver" type="submit" className="btn btn-lg btn-success"><i className="fa fa-calendar-check-o">Reserver</i></button>
                 <div>{this.state.message}</div>
               </div>

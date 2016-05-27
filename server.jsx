@@ -77,6 +77,7 @@ app.use((req, res) => {
 
                 
                 <script src='/components/jquery/dist/jquery.min.js'></script>
+                <script src='/components/jquery-modal/jquery.modal.min.js'></script>
                   <script src='/components/moment/min/moment.min.js'></script>
                   <script src='/components/fullcalendar/dist/fullcalendar.min.js'></script>
                   <script src='/components/fullcalendar/dist/lang-all.js'></script>

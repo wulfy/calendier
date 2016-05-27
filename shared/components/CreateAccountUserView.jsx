@@ -2,7 +2,7 @@ import React from 'react';
 import { connect }            from 'react-redux';
 import * as CreateAccountActions from 'actions/CreateAccountActions';
 import * as LoginActions       from 'actions/LoginActions';
-import { browserHistory, Router, Route, Link } from 'react-router';
+import { browserHistory,router } from 'react-router';
 import RequestDisplay from 'components/RequestDisplay';
 
 @connect(state => ({ createAccount: state.createAccount, login: state.login}))
@@ -10,7 +10,7 @@ export default class CreateAccountUserView extends React.Component {
 
   componentWillMount = () =>{
       var {params} = this.props;
-      var role = (params.type == "user")?"ROLE_USER":"ROLE_CLIENT";
+      //var role = (params.type == "user")?"ROLE_USER":"ROLE_CLIENT";
       this.setState({error:{}});
     }
 
@@ -58,13 +58,19 @@ export default class CreateAccountUserView extends React.Component {
       }
     else if(login.id)
     {
-      window.location.href = "/account";
+      if(this.props.params.type == "user")
+      {
+        console.log("redirecting");
+        browserHistory.push('/calendrier/params/edit');
+      }
+      else
+        window.location.href = "/account";
     }
   }
 
   render() 
   {
-  	var {createAccount,role} = this.props;
+  	var {createAccount} = this.props;
     var message = this.state.error;
 
     return (

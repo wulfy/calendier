@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link, browserHistory } from 'react-router';
+import { connect }            from 'react-redux';
+import LoginContainer       from 'components/LoginContainer';
 
+@connect(state => ({ login: state.login}))
 export default class Home extends React.Component {
   
   componentWillMount= () => {
@@ -9,6 +12,7 @@ export default class Home extends React.Component {
   						"http://lesnoces.de/js/vendor/scrollAnimator.js",
   						"http://lesnoces.de/js/vendor/jquery.mousewheel.js",
   						"/animconfig.js"];
+    this.firtload = true;
   
   }
 
@@ -36,14 +40,29 @@ export default class Home extends React.Component {
   componentWillUnmount= () => {
     document.body.style.overflow = "auto";
   }
+  componentDidUpdate = (prevProps, prevState) => {
+
+  }
   render() 
   {
-    return (
-      <div id="homecontent">
-          	<div id="connectbuttons" >
+     var {login} = this.props;
+    var buttons_login = <div id="connectbuttons" >
               <Link to={`/createAccount`} className="btn btn-info btn-lg">créer un compte </Link>
               <Link to={`/account`} className="btn btn-outline-inverse connect btn-lg">connecter</Link>  
-            </div>
+            </div>;
+
+    console.log("login : ");
+    console.log(login);
+
+    if(login.className == null || login.id)
+    {
+        buttons_login = <div id="connectbuttons" > <LoginContainer params={this.props.params}/></div>;
+    } 
+
+    
+    return (
+      <div id="homecontent">
+          	{buttons_login}
           	<div id="bg1" className="section-bg animated"></div>
           	<div id="bg2" className="section-bg animated"></div>
           	<img id="phone" className="animated" src="http://www.jerecuperemonex.com/wp-content/uploads/2013/09/recontacter-son-ex-erreurs-a-eviter.png" width="200px"  />

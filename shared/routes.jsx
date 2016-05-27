@@ -9,6 +9,7 @@ import CreateAccountUserView from 'components/CreateAccountUserView';
 import CreateAccountClientView from 'components/CreateAccountClientView';
 import EditCalendarParamsView from 'components/EditCalendarParamsView';
 import EditAccountFormView from 'components/EditAccountFormView'; 
+import Home from 'components/Home'; 
 
 export default (
   <Route name="app" component={App} path="/">
@@ -18,6 +19,7 @@ export default (
     <Route component={CreateAccountUserView} path="/account/create/:type" />
     <Route component={CreateAccount} path="/createAccount" />
     <Route component={EditCalendarParamsView} path="/calendrier/params/edit" />
+    <Route component={Home} path="/" />
   </Route>
 
 );

@@ -3,7 +3,7 @@
 
 import React       from 'react';
 import { render }  from 'react-dom';
-import { Router }  from 'react-router';
+import { Router,match,browserHistory}  from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes      from 'routes';
 import { createStore, combineReducers } from 'redux';
@@ -18,6 +18,7 @@ import {logMiddleware,discardMiddleware,thunkMiddleware}   from 'lib/logMiddlewa
 
 const history = createBrowserHistory();
 
+
 let initialState = window.__INITIAL_STATE__;
 
 const reducer = combineReducers(reducers);
@@ -28,10 +29,18 @@ const store   = applyMiddleware(promiseMiddleware,logMiddleware)(createStore)(re
 /*initialState.calendar.result.map(function(events) {
 		console.log(events);
 	});*/
+/*
+match({ history, routes }, (error, redirectLocation, renderProps) => {
+  render(<Provider store={store}>
+      			<Router children={routes} history={history} />
+  			</Provider>,
+  document.getElementById('react-view'))
+});*/
+
 
 render(
   <Provider store={store}>
-      <Router children={routes} history={history} />
+      <Router children={routes} history={browserHistory} />
   </Provider>,
   document.getElementById('react-view')
 );

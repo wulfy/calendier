@@ -11,6 +11,8 @@ export default class AppView extends React.Component {
 		headerLogin = <LoginContainer params={this.props.params}/>;
 
     return (
+
+
       <div id="app-view">
         <nav>
           <h1><Link to={`/`}> <i className="fa fa-calendar rotate"></i> Calendrier</Link></h1>
