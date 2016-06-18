@@ -1,6 +1,6 @@
 export default function fetchComponentData(dispatch, components, params) {
 	console.log("fetch:");
-
+  console.log(params);
   const needs = components.reduce( (prev, current) => {
 
     return (current.needs || [])

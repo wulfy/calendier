@@ -24,7 +24,8 @@ export default function CalendarReducer(state = defaultState, action) {
             reservations.push({id:events[i].id, title:events[i].title , start: moment(events[i].dateStart.timestamp *1000).utcOffset('+0100'),end:moment(events[i].dateEnd.timestamp *1000).utcOffset('+0100'),duree:events[i].duree, idClient:events[i].idClient})
           }
       return {reservations:reservations} ;
-    case 'POST_BOOKING': 
+    case 'POST_BOOKING':
+    case 'DELETE_BOOKING': 
       return {message:action.res.data,...state} ;
     default:
       return state;

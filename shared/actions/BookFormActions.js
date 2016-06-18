@@ -1,14 +1,14 @@
-export function displayForm(title,start,end,id,text,login,message,free)
+export function displayForm(title,start,end,eventId,text,login,calendarparams,free)
 {
   return {
     type: 'DISPLAY_FORM',
     title:title,
     start:start,
     end:end,
-    id:id,
+    eventId:eventId,
     text:text,
     login:login,
-    message:message,
+    calendarparams:calendarparams,
     free:free
   }
 }

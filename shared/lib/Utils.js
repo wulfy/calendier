@@ -23,7 +23,7 @@ export function convertDataToCalendarEvents(reservations)
 
 export function myMoment(data,format)
   {
-    return moment(data,format).utcOffset('+0100');
+    return moment(data,format).utcOffset('+0200');
   }
 
 export function isClickableDate(date,offDays)

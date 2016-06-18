@@ -94,6 +94,8 @@ app.use((req, res) => {
       //Ainsi le serveur attend le retour de la promesse pour générer le rendu
       //utilise les needs des components fournis par renderprops 
       //ces components sont ceux utilisés dans route car renderprops est rempli par rect-router
+      // renderprops.params est le parametre dans route , ex: /calendrier/:userId si je vais sur la route
+      ///calendrier/72 le param sera userid:72
       fetchComponentData(store.dispatch, renderProps.components, renderProps.params)
                         .then(renderView)
                         .then(html => res.end(html))

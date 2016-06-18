@@ -7,6 +7,7 @@ const BACKEND_POST_URL = "http://localhost/calendrier_api/web/app_dev.php/events
 export function getEvents(params)
 {
   var config = {withCredentials:true};
+ 
   return {
     type: 'GET_EVENTS',
     promise: request.get(BACKEND_GET_USER_URL+params.userId,config),
@@ -34,6 +35,18 @@ export function postBooking(formData,callback,params)
     promise: request.post(BACKEND_POST_URL,formData,headers),
     then:callback,
     thenParams:params,
+    date: Date.now()
+  }
+}
+
+export function deleteEvent(id)
+{
+  var headers = {withCredentials:true};
+  console.log("deleting");
+
+  return {
+    type: 'DELETE_BOOKING',
+    promise: request.delete(BACKEND_POST_URL+"/"+id,headers),
     date: Date.now()
   }
 }

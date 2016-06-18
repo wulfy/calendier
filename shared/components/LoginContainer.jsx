@@ -8,14 +8,23 @@ import * as CalendarActions       from 'actions/CalendarActions';
 @connect(state => ({ login: state.login}))
 export default class LoginContainer extends React.Component {
 
+    componentDidMount = () => {
+        $("#login-message").hide();
+    }
     componentDidUpdate =(prevProps,prevState)=>{
         console.log("did update login");
         var {login,dispatch} = this.props;
-        //display message container
-        $("#login-message").show();
-        //hide message container after 5 seconds
-        setTimeout(function(){fadeOut("#login-message")},5000);
-        //setCurrentUser(login);
+        var prevlogin = prevProps.login;
+
+        if(prevlogin.message != login.message)
+        {
+            //display message container
+            $("#login-message").show();
+            //hide message container after 5 seconds
+            setTimeout(function(){fadeOut("#login-message")},5000);
+            //setCurrentUser(login);
+        }
+        
     }
 	render()
 	{

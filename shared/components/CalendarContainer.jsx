@@ -28,10 +28,11 @@ export default class CalendarContainer extends React.Component {
       this.displayLoginBox = false;
       this.today = new myMoment(1, "HH");
       this.currentMonth =  this.today.month();
+    
 
     }
     componentDidMount = ()=>{
-      var {calendarParams} = this.props;
+      var {calendarParams,login} = this.props;
       console.log("didmount CalendarContainer");
       //do not use state, use data in "component will mount"
       this.state={calendarObject:'',currentReservations:'',freeMonth:'',free:'',mine:'',selectedDay:'',previouscolor:'',blockSelectedDay:false};
@@ -53,13 +54,13 @@ export default class CalendarContainer extends React.Component {
               slotDuration: '00:15:00',
               timeFormat: 'H:mm',
               timezone: 'Europe/Paris',
-              utcOffset: '+0100',
+              utcOffset: '+0200',
               minTime: '08:00',
               maxTime: '22:00',
               displayEventEnd : true,
               lang:'fr',
               allDaySlot:false,
-              defaultDate: new moment(),
+              defaultDate: new myMoment(1, "HH"),
               eventRender: function(event, element, view){
                   element.append('<p class="text">RESERVER</p>');
               },
@@ -83,14 +84,11 @@ export default class CalendarContainer extends React.Component {
 
                   var relativeY = offset.top-150;
                       $("#form-container").css({left: relativeX,top:relativeY});
-                      $("#close-form").click(()=>{
-                          reactThis.blockSelectedDay = false;
-                          }
-                        );
-                      reactThis.blockSelectedDay = true;
+                      
                       console.log(calEvent);
                       console.log("start");
-                      dispatch(BookFormActions.displayForm(calEvent.title,calEvent.start.toDate(),calEvent.end.toDate(),calEvent.id,text,this.props.login.login, this.props.calendarParams.message, calEvent.free));
+
+                      dispatch(BookFormActions.displayForm(calEvent.title,calEvent.start.toDate(),calEvent.end.toDate(),calEvent.id,text,this.props.login, this.props.calendarParams, calEvent.free));
                   }
 
 
@@ -126,6 +124,14 @@ export default class CalendarContainer extends React.Component {
 
 
             });
+
+      //ne pas utiliser setinterval tout seul car le composant se recharge et il semble qu'il perde l'identifiant de retour
+      //en gros set interval ne sait plus à qui donner le "promise"
+      this.interval = setInterval(() => {
+                var {calendarParams} = this.props;
+                if(document.getElementById("book-modal").style.display != "block" && typeof calendarParams.idUser !== "undefined")
+                  dispatch(CalendarActions.getEvents({userId:calendarParams.idUser}));
+                }, 2000);
       console.log("didmount");
     }
 
@@ -179,8 +185,10 @@ export default class CalendarContainer extends React.Component {
 
     }
     toggleSelectCreneau= (element) => {
-      if(!this.blockSelectedDay)
+
+      if($("#book-modal").css('display') != 'block')
       {
+        
         if(this.state.selectedDay )
         {
           this.state.selectedDay.css('background-color', this.state.previouscolor);
@@ -252,7 +260,7 @@ export default class CalendarContainer extends React.Component {
 	{
 		  console.log("STATE RENDERING CALENDAR CONTAINER : ");
     	var { events, dispatch, calendarParams, login} = this.props;
-      var loginpopinClass = (login.login || !this.displayLoginBox)?"hide":"show";
+      
 		return (
 			<div id="calendar-container">
           <div className="panel panel-default">

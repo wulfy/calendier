@@ -37,27 +37,33 @@ export default class FormContainer extends React.Component {
       /*var displayClass = (formData.display?"show":"hide");
       displayClass += " modal fade";*/
      var displayClass = {display:formData.display?"block":"none"};
-     var stylegrey = {position:"absolute", width:"100%", height:"100%", "background-color":"grey",opacity:"0.6"};
+     var stylegrey = {position:"absolute", width:"100%", height:"100%", "backgroundColor":"grey",opacity:"0.6"};
       var view = "";
       var msg = (message.error?message.error + " " : "") + this.props.message.data;
       console.log(formData);
       console.log("formdata");
       var details = "";
+      var logged = false;
+
+      if(typeof formData.login !== "undefined")//server rendering
+        logged = typeof formData.login.id !== "undefined" ;
       
-      if(formData.login)
+      if(logged)
       {
-        view = <FormView
-                    {...bindActionCreators({...BookFormActions,...CalendarActions},dispatch)} handleCloseForm={this.handleCloseForm} userId={this.props.userId} message={msg} formData={formData}/>
-          if(!formData.free)
+          if(formData.free)
           {
-            view = <DetailsEventView {...bindActionCreators(DetailEventActions,dispatch)} eventId={formData.id} />;
+            view = <FormView
+                    {...bindActionCreators({...BookFormActions,...CalendarActions},dispatch)} handleCloseForm={this.handleCloseForm} userId={this.props.formData.calendarparams.idUser} message={msg} formData={formData}/>;
+          }else
+          {
+            view = <DetailsEventView {...bindActionCreators(DetailEventActions,dispatch)} formData={formData} />;
           }
        }else
        {
         view = <div id="loginPopIn"> Vous devez vous logger</div>
        }
 		return (
-            <div id="book-modal" style={displayClass} className="modal fade in" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+            <div id="book-modal" style={displayClass} className="modal fade in" tabIndex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
                 <div id="greybackground" style={stylegrey} onClick={this.handleCloseForm} ></div>
                 <div className="modal-dialog modal-sm" role="document">
                   <div className="modal-content">
