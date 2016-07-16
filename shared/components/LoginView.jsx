@@ -11,7 +11,8 @@ export default class LoginView extends React.Component {
         this.wait = true;
   }
   componentDidMount =(prevProps,prevState)=>{
-    if(getCookie("PHPSESSID"))
+
+    if(localStorage.getItem("sessionToken") == "ok")
       this.props.connectUser(null,this.refreshUserEvents);
   }
 

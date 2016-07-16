@@ -10,7 +10,7 @@ import RequestDisplay from 'components/RequestDisplay';
 export default class LoginContainer extends React.Component {
 
     componentDidMount = () => {
-        $("#login-message").hide();
+
 
     }
     componentDidUpdate =(prevProps,prevState)=>{
@@ -18,20 +18,12 @@ export default class LoginContainer extends React.Component {
         var {login,dispatch} = this.props;
         var prevlogin = prevProps.login;
 
-        if(prevlogin.message != login.message)
-        {
-            //display message container
-            $("#login-message").show();
-            //hide message container after 5 seconds
-            setTimeout(function(){fadeOut("#login-message")},5000);
-            //setCurrentUser(login);
-        }
-
-        
             if(typeof(localStorage) !== "undefined" )
             {
-                if(login.id)
-                    localStorage.setItem("sessionToken", "xxxxx");
+                console.log("session token");
+                console.log(login.id);
+                if(login.id !== null)
+                    localStorage.setItem("sessionToken", "ok");
                 else
                     localStorage.removeItem("sessionToken");
             }
