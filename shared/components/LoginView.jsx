@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginUserView              from 'components/LoginUserView';
 import LoginFormView              from 'components/LoginFormView';
+import {getCookie}  from 'lib/Utils';
 
 export default class LoginView extends React.Component {
 
@@ -10,7 +11,8 @@ export default class LoginView extends React.Component {
         this.wait = true;
   }
   componentDidMount =(prevProps,prevState)=>{
-    this.props.connectUser(null,this.refreshUserEvents);
+    if(getCookie("PHPSESSID"))
+      this.props.connectUser(null,this.refreshUserEvents);
   }
 
   refreshUserEvents = () => {
@@ -53,7 +55,7 @@ export default class LoginView extends React.Component {
       view = <LoginFormView handleLogin={this.handleLogin}/>;
     }
 
-    view= this.wait?<img className="waitingimg" src="http://i.stack.imgur.com/MnyxU.gif"/>:<div>{view}</div>;
+    //view= this.wait?<img className="waitingimg" src="http://i.stack.imgur.com/MnyxU.gif"/>:<div>{view}</div>;
 
 		return (
            <div id="login-view">

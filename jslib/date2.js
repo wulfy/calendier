@@ -9,6 +9,8 @@ function mylog(text){
   }
 
 
+
+
 var weekday = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 
 var month = new Array(12);

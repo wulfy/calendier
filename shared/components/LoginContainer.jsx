@@ -4,12 +4,14 @@ import { connect }            from 'react-redux';
 import LoginView              from 'components/LoginView';
 import * as LoginActions       from 'actions/LoginActions';
 import * as CalendarActions       from 'actions/CalendarActions';
+import RequestDisplay from 'components/RequestDisplay';
 
 @connect(state => ({ login: state.login}))
 export default class LoginContainer extends React.Component {
 
     componentDidMount = () => {
         $("#login-message").hide();
+
     }
     componentDidUpdate =(prevProps,prevState)=>{
         console.log("did update login");
@@ -24,6 +26,15 @@ export default class LoginContainer extends React.Component {
             setTimeout(function(){fadeOut("#login-message")},5000);
             //setCurrentUser(login);
         }
+
+        
+            if(typeof(localStorage) !== "undefined" )
+            {
+                if(login.id)
+                    localStorage.setItem("sessionToken", "xxxxx");
+                else
+                    localStorage.removeItem("sessionToken");
+            }
         
     }
 	render()
@@ -34,7 +45,8 @@ export default class LoginContainer extends React.Component {
             <div id="login-container">
                 <LoginView
                     {...bindActionCreators({...LoginActions,...CalendarActions},dispatch)} loginObject={login} params={this.props.params} />
-                    <div id="login-message" className={login.className}>{login.message}</div>
+                    <div id="login-message" > <RequestDisplay requestId="CONNECT_USER"/> </div>
+                    
             </div>
       		);
 	}

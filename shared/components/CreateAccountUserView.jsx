@@ -42,10 +42,10 @@ export default class CreateAccountUserView extends React.Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    if(nextProps.createAccount.error)
+    /*if(nextProps.createAccount.error)
       this.setState({error:nextProps.createAccount.data});
     console.log("state");
-    console.log(this.state);
+    console.log(this.state);*/
   }
   componentDidUpdate = (prevProps, prevState) => {
     var {createAccount,login} = this.props;
@@ -71,7 +71,10 @@ export default class CreateAccountUserView extends React.Component {
   render() 
   {
   	var {createAccount} = this.props;
-    var message = this.state.error;
+    var message = {};
+
+    if(createAccount.data)
+      message = createAccount.data;//this.state.error;
 
     return (
       <div id="createUserAccount-content">

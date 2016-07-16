@@ -24,18 +24,21 @@ export default class DetailsEventView extends React.Component {
 
     console.log("RENDER DETAILS");
     var {details,formData} = this.props;
-    var username,title,deletable = "";
+    var username,title,deletable,mailto,email = "";
     var login = formData.login;
 
     if(details)
     {
       username = details.username;
       title = details.title;
+      email = details.email;
+      mailto = 'mailto:'+email;
       console.log(details);
       console.log(login);
       if(details.idClient == login.id || formData.calendarparams.idUser == login.id)
       {
         deletable = <a href='#' onClick={this.handleDeleteEvent}>"supprimer"</a>;
+        mailto = <a href={mailto}> <i className="fa fa-envelope" aria-hidden="true"></i> </a>;
       }
 
     }
@@ -43,6 +46,7 @@ export default class DetailsEventView extends React.Component {
            <div id="detail_event">
            {title}<br/>
            {username}
+           {mailto}
            <hr/>
           {deletable}
            </div>
