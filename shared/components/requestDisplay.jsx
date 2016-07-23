@@ -12,10 +12,16 @@ export default class RequestDisplay extends React.Component {
     
   }
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    var {requestId} = this.props;
+    var {requestDisplay} = nextProps
+
+    return (requestDisplay.type.indexOf(requestId) > -1);
+  }
 	render()
 	{
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
-      console.log("RENDER RequestDisplay");
+      console.log("RENDER RequestDisplay ");
       var {requestDisplay,requestId} = this.props;
 
       var messageClass = {"request":"","success":"label label-success","error":"label label-danger"}
@@ -43,7 +49,7 @@ export default class RequestDisplay extends React.Component {
         } 
       }
 
-
+      console.log("RENDER RequestDisplay message" + message);
       var view = <div id="requestDisplayView" className ={classname} > {message} </div> ;
 		return (
            <div id="requestDisplayComponent">

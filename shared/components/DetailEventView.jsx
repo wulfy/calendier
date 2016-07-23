@@ -37,15 +37,15 @@ export default class DetailsEventView extends React.Component {
       console.log(login);
       if(details.idClient == login.id || formData.calendarparams.idUser == login.id)
       {
-        deletable = <a href='#' onClick={this.handleDeleteEvent}>"supprimer"</a>;
+        deletable = <a href='#' onClick={this.handleDeleteEvent}>supprimer</a>;
         mailto = <a href={mailto}> <i className="fa fa-envelope" aria-hidden="true"></i> </a>;
       }
 
     }
 		return (
            <div id="detail_event">
-           {title}<br/>
-           {username}
+           titre: {title}<br/>
+           utilisateur : {username}
            {mailto}
            <hr/>
           {deletable}

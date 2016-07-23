@@ -44,6 +44,7 @@ export default class FormContainer extends React.Component {
       console.log("formdata");
       var details = "";
       var logged = false;
+      var modalTitle = "Réserver";
 
       if(typeof formData.login !== "undefined")//server rendering
         logged = typeof formData.login.id !== "undefined" ;
@@ -56,7 +57,8 @@ export default class FormContainer extends React.Component {
                     {...bindActionCreators({...BookFormActions,...CalendarActions},dispatch)} handleCloseForm={this.handleCloseForm} userId={this.props.formData.calendarparams.idUser} message={msg} formData={formData}/>;
           }else
           {
-            view = <DetailsEventView {...bindActionCreators(DetailEventActions,dispatch)} formData={formData} />;
+            view        = <DetailsEventView {...bindActionCreators(DetailEventActions,dispatch)} formData={formData} />;
+            modalTitle  = "détails réservation";
           }
        }else
        {
@@ -70,7 +72,7 @@ export default class FormContainer extends React.Component {
 
                     <div className="modal-header" >
                         <div id="close-form" onClick={this.handleCloseForm}>X</div>
-                        <h4 className="modal-title" id="myModalLabel"> Réserver </h4>
+                        <h4 className="modal-title" id="myModalLabel"> {modalTitle} </h4>
                     </div>    
                     <div className="modal-body" >
                         <span id="creneauForm">{formData.text}</span>
