@@ -1,6 +1,7 @@
 module.exports =  {
 
 logMiddleware : function   ({ dispatch, getState }) {
+    //next et la fonction "createstore" qui prend en paramètre reducers et initialstate
     return function(next) {
         return function (action) {
             console.log('logMiddleware action received:', action)

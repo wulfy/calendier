@@ -2,7 +2,7 @@ import express                   from 'express';
 import React                     from 'react';
 import { renderToString }        from 'react-dom/server'
 import { RouterContext, match } from 'react-router';
-import createLocation            from 'history/lib/createLocation';
+//import createLocation            from 'history/lib/createLocation';
 import routes                    from 'routes';
 import { createStore, combineReducers } from 'redux';
 import { Provider }                     from 'react-redux';
@@ -15,6 +15,7 @@ import fetchComponentData from 'lib/fetchComponentData';
 import fs from 'fs';
 import yaml from 'js-yaml';
 
+
 const app = express();
 
 
@@ -22,12 +23,12 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(express.static(path.join(__dirname, 'jslib')));
 
 app.use((req, res) => {
-  const location = createLocation(req.url);
+  //const location = createLocation(req.url);
   const reducer  = combineReducers(reducers);
   const store    = applyMiddleware(promiseMiddleware,logMiddleware)(createStore)(reducer);
 
   //matche la location avec le tableau de "routes" et retourne un objet renderProps qui contient l'élément correspondant a la route
-  match({ routes, location }, (err, redirectLocation, renderProps) => {
+  match({ routes, location : req.url }, (err, redirectLocation, renderProps) => {
     if (err) { 
       console.error(err);
       return res.status(500).end('Internal server error');
@@ -101,6 +102,12 @@ app.use((req, res) => {
                         .then(html => res.end(html))
                         .catch(err => res.end(err.message));
   });
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, function () {
+  console.log('Server listening on', PORT);
 });
 
 export default app;

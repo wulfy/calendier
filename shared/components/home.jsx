@@ -59,8 +59,9 @@ export default class Home extends React.Component {
         buttons_login = <div id="connectbuttons" > <LoginContainer params={this.props.params}/></div>;
     } 
 
-    
+    console.log("rendering home");
     return (
+      
       <div id="homecontent">
           	{buttons_login}
           	<div id="bg1" className="section-bg animated"></div>

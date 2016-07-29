@@ -7,7 +7,12 @@ import {mylog,myMoment}  from 'lib/Utils';
 export default class SearchContainer extends React.Component {
 
     componentWillMount= () => {
-    this.setState({toStartHour: 0});
+    this.setState({toStartHour: 0,display:false,displayTime:0,searchResult:null});
+    }
+    componentDidMount = () => {
+        this.messageDiv = document.getElementById("res");
+        this.formContainer = document.getElementById("formContainer");
+        this.displaySearchButton = document.getElementById("displaySearchButton");
     }
     gotoDay = (strDate) =>{
         console.log("gotoday");
@@ -40,21 +45,18 @@ export default class SearchContainer extends React.Component {
         return propositions;
     }
 
-    displaySearchResult = (data,displayTime) => {
-        this.setState({searchResult:data,displayTime:displayTime})
-    }
     componentDidUpdate = (prevProps,prevState) => {
         console.log("component updated");
-        if(this.state.searchResult)
+        if(this.state.display)
         {
-            var searchResultObj = $("#res");
-            searchResultObj.show();
-            searchResultObj.addClass("animate");
-
+            this.displayMessage();
             if(Number.isInteger(this.state.displayTime))
             {
-                 setTimeout(function(){ searchResultObj.removeClass("animate");  }, this.state.displayTime*1000); 
+                 setTimeout(function(){ this.handleMessage(null); }.bind(this), this.state.displayTime*1000); 
             }
+        }else
+        {
+            this.hideMessage();
         }
     }
     handleSearchForm = (e) =>{
@@ -62,7 +64,7 @@ export default class SearchContainer extends React.Component {
         const weekday = ["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
         
         var res = "";
-        var displayTime = null;
+        var displayTime = 5;
         if(e.target.fromHour.value && e.target.fromMin.value && 
            e.target.toHour.value && e.target.toMin.value)
         {
@@ -87,15 +89,15 @@ export default class SearchContainer extends React.Component {
             if(days.length <1)
             {
                 res = "Aucun creneau trouvé. Essayez avec une période différente";
-                displayTime = 5;
+                //displayTime = 5;
             }
         }else
         {
             mylog(e.target.toHour.value);
              res = "Veuillez sélectionner une heure de début et de fin";
-             displayTime = 5;
+             //displayTime = 5;
         }
-        this.displaySearchResult(res,displayTime);
+        this.handleMessage(res,displayTime);
         
     }
 
@@ -157,20 +159,35 @@ export default class SearchContainer extends React.Component {
         return <option value="" key="-"> {text} </option>;
     }
     displaySearchForm = () =>{
-        $("#displaySearchButton").addClass("rollRight");
-        $("#formContainer").show();
-        $("#formContainer").addClass("appear");
+        this.displaySearchButton.classList.add("rollRight");
+        this.formContainer.style.display = "block";
+        this.formContainer.classList.add("appear");
     }
     hideSearchForm = (e) => {
         e.preventDefault();
-        $("#displaySearchButton").removeClass("rollRight");
-        $("#formContainer").removeClass("appear");
-        $("#formContainer").hide();
-        $("#res").removeClass("animate");
-        $("#res").hide();
+        this.displaySearchButton.classList.remove("rollRight");
+        this.formContainer.classList.remove("appear");
+        this.formContainer.style.display = "none";
+        this.hideMessage();
+   }
+   displayMessage = () => {
+        this.messageDiv.style.display = "block";
+        this.messageDiv.classList.add("animate");
+
+   }
+   hideMessage = () => {
+
+        this.messageDiv.style.display = "none";
+        this.messageDiv.classList.remove("animate");
    }
    handleChange = (event) => {
-    this.setState({toStartHour: event.target.value,searchResult:null});
+        const { toStartHour, searchResult, ...rest } = this.state;
+        this.setState({toStartHour: event.target.value,searchResult:null,...rest});
+    }
+    handleMessage = (newSearchResult,newDisplayTime) => {
+        const { searchResult, displayTime,  display, ...rest } = this.state;
+        var newDisplay = (newSearchResult != null);
+        this.setState({searchResult:newSearchResult,displayTime:newDisplayTime, display:newDisplay, ...rest});
     }
 	render()
 	{
@@ -182,6 +199,8 @@ export default class SearchContainer extends React.Component {
       var selectTo = <div className="selectBoxes"> <select name="toHour" form="search_form" >{this.buildSelectOptions(this.state.toStartHour,24,1)} </select>  :  <select name="toMin" form="search_form" >{this.buildSelectOptions(0,59,calendarParams.duree)} </select> </div>;
       var selectDay = <select name="day" form="search_form" >{this.defaultOption("Choisir un jour")} {this.buildSelectOptions(0,0,1,weekday)} </select> ;
       var {message,dispatch} = this.props;
+
+
 		return (
             <div id='searchFormContainer'>
                 <div id='displaySearchButton'> 
@@ -208,7 +227,7 @@ export default class SearchContainer extends React.Component {
                         </button>
                     </form>
                 </div>
-                <div id='res' className='message' ref={(ref) => this.resSearchDiv = ref} >{this.state.searchResult}</div>
+                <div id='res' className="message"  >{this.state.searchResult}</div>
             </div>
       		);
 	}

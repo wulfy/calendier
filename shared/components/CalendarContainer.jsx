@@ -223,8 +223,8 @@ export default class CalendarContainer extends React.Component {
                       this.updateReservations();
                     }
                       
-                    $("#res").removeClass("animate");
-                    $("#res").hide();
+                    //$("#res").removeClass("animate");
+                    //$("#res").hide();
                     console.log("month refresh");
                     view.intervalStart.month()
                     events.push(...this.state.freeMonth,...this.state.mine);

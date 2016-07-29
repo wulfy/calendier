@@ -2,6 +2,7 @@ import React from 'react';
 import Home from 'components/Home';
 import LoginContainer       from 'components/LoginContainer';
 import { Link, browserHistory } from 'react-router';
+import MyTools   from 'components/MyTools';
 
 export default class AppView extends React.Component {
   render() {
@@ -20,6 +21,7 @@ export default class AppView extends React.Component {
         {headerLogin}
       
         {this.props.children || <Home />}
+        <MyTools/>
       </div>
     );
   }

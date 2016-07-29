@@ -4,7 +4,7 @@
 import React       from 'react';
 import { render }  from 'react-dom';
 import { Router,match,browserHistory}  from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+//import createBrowserHistory from 'history/lib/createBrowserHistory';
 import routes      from 'routes';
 import { createStore, combineReducers } from 'redux';
 import { Provider }                     from 'react-redux';
@@ -13,10 +13,11 @@ import { fromJS }                       from 'immutable';
 import { applyMiddleware } from 'redux';
 import promiseMiddleware   from 'lib/promiseMiddleware';
 import {logMiddleware,discardMiddleware,thunkMiddleware}   from 'lib/logMiddleware';
+import MyTools   from 'components/MyTools';
+import configureStore from 'store/configureStore';
 
 
-
-const history = createBrowserHistory();
+//const history = createBrowserHistory();
 
 
 let initialState = window.__INITIAL_STATE__;
@@ -24,7 +25,7 @@ let initialState = window.__INITIAL_STATE__;
 const reducer = combineReducers(reducers);
 //l'ordre d'insertion est l'ordre d execution des middleware donc thunk en premier empeche log de connaitre une action de rdemande de refresh de flickr
 //par contre le dispatch de résultat GET_xxxxx  sera lui connu (car ce n est pas une fonction, cf l'action flickr)
-const store   = applyMiddleware(promiseMiddleware,logMiddleware)(createStore)(reducer,initialState);
+const store   = configureStore();
 
 /*initialState.calendar.result.map(function(events) {
 		console.log(events);

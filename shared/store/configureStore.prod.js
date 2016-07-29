@@ -1,11 +1,15 @@
-'use strict';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import promiseMiddleware   from 'lib/promiseMiddleware';
+import {logMiddleware,thunkMiddleware}   from 'lib/logMiddleware';
+import * as reducers  from 'reducers';
 
-require('babel/register')({});
+// Middleware you want to use in production:
+const enhancer = applyMiddleware(promiseMiddleware,logMiddleware);
+const rootReducer  = combineReducers(reducers);
 
-var server = require('./server');
-
-const PORT = process.env.PORT || 3000;
-
-server.listen(PORT, function () {
-  console.log('Server listening on', PORT);
-});
+export default function configureStore(initialState) {
+  // Note: only Redux >= 3.1.0 supports passing enhancer as third argument.
+  // See https://github.com/rackt/redux/releases/tag/v3.1.0
+   return enhancer(createStore)(rootReducer);
+  //return createStore(rootReducer, initialState, enhancer);
+};
