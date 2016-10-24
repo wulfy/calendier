@@ -186,6 +186,7 @@ right: 0px;
 #login-form{
   display: none;
   text-align: center;
+  width: 500px;
 }
 
 .search_result{

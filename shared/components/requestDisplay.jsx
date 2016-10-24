@@ -4,12 +4,17 @@ import { connect }            from 'react-redux';
 @connect(state => ({ requestDisplay: state.requestDisplay}))
 export default class RequestDisplay extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {showText: true};
+  }
+
   componentWillMount = () => {
     
   }
 
   resetMessage = () => {
-    
+   
   }
 
   shouldComponentUpdate = (nextProps, nextState) => {
@@ -21,14 +26,17 @@ export default class RequestDisplay extends React.Component {
 	render()
 	{
     	//todos = todos.todos.concat(todos.message); //décommenter pour que message change le store
-      console.log("RENDER RequestDisplay ");
+      
       var {requestDisplay,requestId} = this.props;
 
       var messageClass = {"request":"","success":"label label-success","error":"label label-danger"}
       var message = "";
+
       if(requestDisplay.type.indexOf(requestId) > -1)
       if(requestDisplay.status)
       {
+        console.log("RENDER RequestDisplay "+requestDisplay.status);
+        console.log(requestDisplay);
         var classname = messageClass[requestDisplay.status];
      
         if(requestDisplay.status == "request")
@@ -46,6 +54,7 @@ export default class RequestDisplay extends React.Component {
             message += "server return an unexpected message" ;
 
           setTimeout(function(){document.getElementById("requestDisplayView").className = "hide";},5000);
+          //setTimeout(()=>{this.resetMessage();},5000);
         } 
       }
 

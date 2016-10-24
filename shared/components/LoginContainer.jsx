@@ -22,17 +22,22 @@ export default class LoginContainer extends React.Component {
             {
                 console.log("session token");
                 console.log(login.id);
-                if(login.id !== null)
+                if(typeof login.id !== 'undefined' && login.id !== null)
+                {
+                    console.log("session token ok");
                     localStorage.setItem("sessionToken", "ok");
-                else
+                }
+                else{
+                    console.log("session token removed");
                     localStorage.removeItem("sessionToken");
+                }
             }
         
     }
 	render()
 	{
       var {login,dispatch} = this.props;
-      console.log("rendering login container " + login);
+      console.log("rendering login container " + login.id);
 		return (
             <div id="login-container">
                 <LoginView

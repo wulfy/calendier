@@ -1,8 +1,9 @@
 import request from 'axios';
+var parameters = require('lib/parameters');
 
-const BACKEND_GET_CONNECT_URL = "http://localhost/calendrier_api/web/app_dev.php/auth/user/";
-const BACKEND_GET_DISCONNECT_URL = "http://localhost/calendrier_api/web/app_dev.php/logout";
-const BACKEND_EDIT_USER = "http://localhost/calendrier_api/web/app_dev.php/edit/user";
+const BACKEND_GET_CONNECT_URL = parameters.API_SERVER+"/auth/user/";
+const BACKEND_GET_DISCONNECT_URL = parameters.API_SERVER+"/logout";
+const BACKEND_EDIT_USER = parameters.API_SERVER+"/edit/user";
 
 export function connectUser(data,callback)
 {

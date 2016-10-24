@@ -1,6 +1,7 @@
 import request from 'axios';
+var parameters = require('lib/parameters');
 
-const BACKEND_POST_URL = "http://localhost/calendrier_api/web/app_dev.php/users";
+const BACKEND_POST_URL = parameters.API_SERVER+"/users";
 
 
 export function createUser(formData,callback,callbackparams)

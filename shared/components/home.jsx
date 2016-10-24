@@ -70,16 +70,17 @@ export default class Home extends React.Component {
                 <img id="agenda" className="animated" src="http://cdtt33.fr/wp-content/uploads/2014/05/p0310.png" width="100px"  />
 
                 <div id="intro" className="text animated">
-                    <h2> Réserver en ligne </h2>
+                    <h2> Gérez la prise de rendez-vous en ligne ! </h2>
                 </div>
                 <div id="first_text" className="text animated">
                 				<div className="textbg"></div>
                                 <p className="name">Libérez vous du téléphone</p>
                                 <p className="desc">
-				                  Bon ok, vous allez crier au favoritisme car Sophie est la cousine de la future mariée.
-				                        Si vous avez la chance de la croiser, vous comprendrez rapidement que c'est une personne attachante
-				                        et sensible vis-à-vis de son prochain. Le temps est suspendu lorsque l'on discute avec elle.
-				                        1h passe comme 10 min.
+				                  Calendier vous permet de configurer en ligne votre calendrier de réservations.
+                         Vous pourrez ainsi faire profiter à vos clients de fonctionnalités uniques:<br/>
+                         - Possibilité de réserver plusieures semaines à l'avance <br/>
+                         - Recherche des créneaux en fonction d'un jour et d'une heure souhaitée <br/>
+                         - Vous pouvez palier à l'imprévu en supprimant des créneaux d'un jour à l'autre
 				                </p>
                  </div>
 
@@ -89,10 +90,7 @@ export default class Home extends React.Component {
                 <div id="second_text" className="text animated">
                   <div className="textbg"></div>
                   <p className="desc">
-                          Bon ok, vous allez crier au favoritisme car Sophie est la cousine de la future mariée.
-                                Si vous avez la chance de la croiser, vous comprendrez rapidement que c'est une personne attachante
-                                et sensible vis-à-vis de son prochain. Le temps est suspendu lorsque l'on discute avec elle.
-                                1h passe comme 10 min.
+                          
                         </p>
                 </div>
 

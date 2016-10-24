@@ -1,8 +1,9 @@
 import request from 'axios';
+var parameters = require('lib/parameters');
 
 //const BACKEND_GET_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/";
-const BACKEND_GET_USER_URL = "http://localhost/calendrier_api/web/app_dev.php/reservations/user/";
-const BACKEND_POST_URL = "http://localhost/calendrier_api/web/app_dev.php/events";
+const BACKEND_GET_USER_URL = parameters.API_SERVER+"/reservations/user/";
+const BACKEND_POST_URL = parameters.API_SERVER+"/events";
 
 export function getEvents(params)
 {

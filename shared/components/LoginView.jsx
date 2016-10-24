@@ -6,14 +6,14 @@ import {getCookie}  from 'lib/Utils';
 export default class LoginView extends React.Component {
 
   componentWillMount =()=>{
-        console.log("didmount login");
-        //permet d'afficher le gif d'attente
-        this.wait = true;
+        console.log("willmount login");
   }
   componentDidMount =(prevProps,prevState)=>{
 
-    if(localStorage.getItem("sessionToken") == "ok")
+    if(localStorage.getItem("sessionToken") == "ok" && !this.props.loginObject.login)
+    {
       this.props.connectUser(null,this.refreshUserEvents);
+    }
   }
 
   refreshUserEvents = () => {
@@ -43,8 +43,6 @@ export default class LoginView extends React.Component {
   }
   componentWillUpdate =(nextProps,nextState)=>{
     console.log("will update");
-    if(this.wait)
-            this.wait = false;
   }
 	render()
 	{
